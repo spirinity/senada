@@ -1,0 +1,13 @@
+flutter_launcher_icons:
+  android: true
+  ios: true
+
+  image_path: assets/icons/senada_icon.png
+  image_path_android: assets/icons/senada_icon.png
+  image_path_ios: assets/icons/senada_icon.png
+
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/icons/senada_adaptive_foreground.png
+  adaptive_icon_foreground_inset: 0
+
+  remove_alpha_ios: true

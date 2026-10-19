@@ -1,0 +1,240 @@
+import 'package:flutter/material.dart';
+import '../models/music_item.dart';
+import '../theme/theme.dart';
+
+abstract final class SampleMusicData {
+  static const List<ArtistItem> artists = [
+    ArtistItem(
+      id: 'art-1',
+      name: 'NIKI',
+      role: 'Singer-Songwriter',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&q=80',
+      accentColor: AppColors.primary500,
+      initials: 'NK',
+    ),
+    ArtistItem(
+      id: 'art-2',
+      name: 'FKJ',
+      role: 'Multi-instrumentalist',
+      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&q=80',
+      accentColor: AppColors.accent2_500,
+      initials: 'FK',
+    ),
+    ArtistItem(
+      id: 'art-3',
+      name: 'Barbara',
+      role: 'Indie Pop',
+      avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&q=80',
+      accentColor: AppColors.accent500,
+      initials: 'BA',
+    ),
+    ArtistItem(
+      id: 'art-4',
+      name: 'Dan',
+      role: 'Neo Soul & R&B',
+      avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&q=80',
+      accentColor: AppColors.warning500,
+      initials: 'DN',
+    ),
+    ArtistItem(
+      id: 'art-5',
+      name: 'Sia',
+      role: 'Alternative & Vocal',
+      avatarUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=160&q=80',
+      accentColor: AppColors.info500,
+      initials: 'SI',
+    ),
+    ArtistItem(
+      id: 'art-6',
+      name: 'Hindia',
+      role: 'Indie Rock',
+      avatarUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=160&q=80',
+      accentColor: AppColors.success500,
+      initials: 'HD',
+    ),
+  ];
+
+  static const List<CollaboratorItem> defaultCollaborators = [
+    CollaboratorItem(
+      name: 'You',
+      avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80',
+      initials: 'ME',
+      backgroundColor: Color(0xFF6366F1),
+    ),
+    CollaboratorItem(
+      name: 'Natalia',
+      avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80',
+      initials: 'NT',
+      backgroundColor: Color(0xFFEC4899),
+    ),
+    CollaboratorItem(
+      name: 'Kevin',
+      avatarUrl: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=120&q=80',
+      initials: 'KV',
+      backgroundColor: Color(0xFF10B981),
+    ),
+  ];
+
+  static const List<LibraryPlaylistItem> playlists = [
+    LibraryPlaylistItem(
+      id: 'pl-1',
+      title: 'Global Pop & R&B Anthems',
+      subtitle: '36 Tracks • 2 hr 15 min',
+      trackCount: 36,
+      yearsRange: '2020–2025',
+      cardBackgroundColor: Color(0xFFE8F1FD), // Pastel soft sky / periwinkle
+      accentColor: AppColors.primary600,
+      genre: 'Pop, R&B & Synthwave',
+      durationText: '2 hr 15 min',
+      heroImageUrl: 'assets/albums/the_weeknd_after_hours.jpg',
+      covers: [
+        DeckCoverItem(
+          title: 'After Hours',
+          artist: 'The Weeknd',
+          imageUrl: 'assets/albums/the_weeknd_after_hours.jpg',
+          rotationDegrees: -5.0,
+          gradientColors: [Color(0xFF7F1D1D), Color(0xFF1E293B)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: "1989 (Taylor's Version)",
+          artist: 'Taylor Swift',
+          imageUrl: 'assets/albums/taylor_swift_1989.jpg',
+          rotationDegrees: 1.5,
+          gradientColors: [Color(0xFF38BDF8), Color(0xFFE0F2FE)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'HIT ME HARD AND SOFT',
+          artist: 'Billie Eilish',
+          imageUrl: 'assets/albums/billie_eilish_hit_me_hard_and_soft.jpg',
+          rotationDegrees: 5.5,
+          gradientColors: [Color(0xFF0369A1), Color(0xFF0C4A6E)],
+          icon: Icons.album_rounded,
+        ),
+      ],
+      collaborators: defaultCollaborators,
+      extraCollaboratorsCount: 6,
+    ),
+    LibraryPlaylistItem(
+      id: 'pl-2',
+      title: 'Modern Rap & Soul Classics',
+      subtitle: '42 Tracks • 2 hr 48 min',
+      trackCount: 42,
+      yearsRange: '2016–2025',
+      cardBackgroundColor: Color(0xFFFEF3D6), // Pastel warm sand / buttercup
+      accentColor: AppColors.warning600,
+      genre: 'Hip-Hop, Neo-Soul & R&B',
+      durationText: '2 hr 48 min',
+      heroImageUrl: 'assets/albums/kendrick_lamar_damn.jpg',
+      covers: [
+        DeckCoverItem(
+          title: 'DAMN.',
+          artist: 'Kendrick Lamar',
+          imageUrl: 'assets/albums/kendrick_lamar_damn.jpg',
+          rotationDegrees: -6.0,
+          gradientColors: [Color(0xFFB91C1C), Color(0xFF18181B)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'SOS',
+          artist: 'SZA',
+          imageUrl: 'assets/albums/sza_sos.jpg',
+          rotationDegrees: 0.0,
+          gradientColors: [Color(0xFF0284C7), Color(0xFF1E3A8A)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'Blonde',
+          artist: 'Frank Ocean',
+          imageUrl: 'assets/albums/frank_ocean_blonde.jpg',
+          rotationDegrees: 4.5,
+          gradientColors: [Color(0xFF84CC16), Color(0xFF1F2937)],
+          icon: Icons.album_rounded,
+        ),
+      ],
+      collaborators: defaultCollaborators,
+      extraCollaboratorsCount: 8,
+    ),
+    LibraryPlaylistItem(
+      id: 'pl-3',
+      title: 'Late Night Disco & Pop Reverie',
+      subtitle: '54 Tracks • 3 hr 10 min',
+      trackCount: 54,
+      yearsRange: '2020–2025',
+      cardBackgroundColor: Color(0xFFF1EAFF), // Pastel lavender / purple
+      accentColor: AppColors.primary600,
+      genre: 'Dance-Pop & Nu-Disco',
+      durationText: '3 hr 10 min',
+      heroImageUrl: 'assets/albums/dua_lipa_future_nostalgia.jpg',
+      covers: [
+        DeckCoverItem(
+          title: 'Future Nostalgia',
+          artist: 'Dua Lipa',
+          imageUrl: 'assets/albums/dua_lipa_future_nostalgia.jpg',
+          rotationDegrees: -4.0,
+          gradientColors: [Color(0xFFDB2777), Color(0xFF4C1D95)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: "Harry's House",
+          artist: 'Harry Styles',
+          imageUrl: 'assets/albums/harry_styles_harrys_house.jpg',
+          rotationDegrees: 1.0,
+          gradientColors: [Color(0xFFFDE68A), Color(0xFFD97706)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'SOUR',
+          artist: 'Olivia Rodrigo',
+          imageUrl: 'assets/albums/olivia_rodrigo_sour.jpg',
+          rotationDegrees: 5.0,
+          gradientColors: [Color(0xFFA855F7), Color(0xFF3B0764)],
+          icon: Icons.album_rounded,
+        ),
+      ],
+      collaborators: defaultCollaborators,
+      extraCollaboratorsCount: 12,
+    ),
+    LibraryPlaylistItem(
+      id: 'pl-4',
+      title: 'Golden Grooves & Modern Funk',
+      subtitle: '28 Tracks • 1 hr 42 min',
+      trackCount: 28,
+      yearsRange: '2021–2025',
+      cardBackgroundColor: Color(0xFFE6F4EA), // Pastel mint / sage
+      accentColor: AppColors.success600,
+      genre: 'Retro Funk, R&B & Cosmic Beats',
+      durationText: '1 hr 42 min',
+      heroImageUrl: 'assets/albums/silk_sonic.jpg',
+      covers: [
+        DeckCoverItem(
+          title: 'An Evening with Silk Sonic',
+          artist: 'Bruno Mars & Anderson .Paak',
+          imageUrl: 'assets/albums/silk_sonic.jpg',
+          rotationDegrees: -5.0,
+          gradientColors: [Color(0xFFD97706), Color(0xFF451A03)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'ASTROWORLD',
+          artist: 'Travis Scott',
+          imageUrl: 'assets/albums/travis_scott_astroworld.jpg',
+          rotationDegrees: 1.5,
+          gradientColors: [Color(0xFFF59E0B), Color(0xFF1E293B)],
+          icon: Icons.album_rounded,
+        ),
+        DeckCoverItem(
+          title: 'eternal sunshine',
+          artist: 'Ariana Grande',
+          imageUrl: 'assets/albums/ariana_grande_eternal_sunshine.jpg',
+          rotationDegrees: 4.5,
+          gradientColors: [Color(0xFFF87171), Color(0xFF7F1D1D)],
+          icon: Icons.album_rounded,
+        ),
+      ],
+      collaborators: defaultCollaborators,
+      extraCollaboratorsCount: 10,
+    ),
+  ];
+}
