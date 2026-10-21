@@ -39,7 +39,6 @@ class HistoryScreen extends StatelessWidget {
           return Column(
             children: [
               ScreenHeader(
-                caption: '${entries.length} lagu diputar',
                 title: 'Riwayat',
                 trailing: entries.isEmpty
                     ? null

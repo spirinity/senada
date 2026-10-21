@@ -94,21 +94,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   duration: const Duration(milliseconds: 200),
                   child: TextButton(
                     onPressed: _isLast ? null : _finish,
-                    style: TextButton.styleFrom(foregroundColor: colors.textPrimary),
-                    child: const Text('Lewati', style: TextStyle(fontSize: 16)),
+                    style: TextButton.styleFrom(
+                      foregroundColor: colors.textPrimary,
+                    ),
+                    child: const Text('Lewati'),
                   ),
                 ),
               ),
             ),
             Text(
               'Senada',
-              style: TextStyle(
-                fontFamily: AppTheme.titleFontFamily,
-                fontSize: 52,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -1.5,
-                height: 1,
-                color: colors.bgBrand,
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             Expanded(
@@ -153,7 +150,9 @@ class _PageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: Center(child: _CoverFan(covers: page.covers))),
+              Expanded(
+                child: Center(child: _CoverFan(covers: page.covers)),
+              ),
               Text(
                 page.title,
                 style: TextStyle(
@@ -168,7 +167,11 @@ class _PageContent extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 page.message,
-                style: TextStyle(fontSize: 15, height: 1.5, color: colors.textSecondary),
+                style: TextStyle(
+                  fontSize: 15,
+                  height: 1.5,
+                  color: colors.textSecondary,
+                ),
               ),
               const SizedBox(height: 28),
             ],
@@ -222,12 +225,18 @@ class _CoverFan extends StatelessWidget {
                 // Kiri, kanan, lalu tengah, supaya cover tengah tergambar paling atas.
                 for (final i in const [0, 2, 1])
                   Transform.translate(
-                    offset: Offset((i - 1) * size * 0.42 * t, -size * 0.12 + (i == 1 ? -10 * t : 0)),
+                    offset: Offset(
+                      (i - 1) * size * 0.42 * t,
+                      -size * 0.12 + (i == 1 ? -10 * t : 0),
+                    ),
                     child: Transform.rotate(
                       angle: (i - 1) * 0.16 * t,
                       child: Opacity(
                         opacity: i == 1 ? 1 : t,
-                        child: _CoverCard(path: covers[i], size: i == 1 ? size : size * 0.86),
+                        child: _CoverCard(
+                          path: covers[i],
+                          size: i == 1 ? size : size * 0.86,
+                        ),
                       ),
                     ),
                   ),

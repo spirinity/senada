@@ -29,6 +29,7 @@ class SongTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return Pressable(
       onTap: onTap,
@@ -46,10 +47,10 @@ class SongTile extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.45),
+                      color: AppColors.neutral950.withValues(alpha: 0.45),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.graphic_eq_rounded, color: Colors.white, size: 22),
+                    child: const Icon(Icons.graphic_eq_rounded, color: AppColors.neutral50, size: 22),
                   ),
               ],
             ),
@@ -62,9 +63,7 @@ class SongTile extends StatelessWidget {
                     song.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    style: textTheme.labelLarge?.copyWith(
                       color: isActive ? colors.textLink : colors.textPrimary,
                     ),
                   ),
@@ -73,7 +72,7 @@ class SongTile extends StatelessWidget {
                     subtitle ?? '${song.artist} · ${formatDuration(song.duration)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: colors.textTertiary),
+                    style: textTheme.bodySmall?.copyWith(color: colors.textTertiary),
                   ),
                 ],
               ),

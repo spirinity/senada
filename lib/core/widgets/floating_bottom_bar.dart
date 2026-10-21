@@ -95,11 +95,7 @@ class _NavItem extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: color,
-                ),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color),
               ),
             ],
           ),

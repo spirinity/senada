@@ -21,7 +21,7 @@ class GlassSurface extends StatelessWidget {
         borderRadius: shape,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.12),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),

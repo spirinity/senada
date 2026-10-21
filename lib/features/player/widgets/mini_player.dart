@@ -16,6 +16,7 @@ class MiniPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = AppScope.of(context).player;
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return ListenableBuilder(
       listenable: player,
@@ -56,17 +57,13 @@ class MiniPlayer extends StatelessWidget {
                                           song.title,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: colors.textPrimary,
-                                          ),
+                                          style: textTheme.labelLarge?.copyWith(color: colors.textPrimary),
                                         ),
                                         Text(
                                           song.artist,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 12.5, color: colors.textTertiary),
+                                          style: textTheme.bodySmall?.copyWith(color: colors.textTertiary),
                                         ),
                                       ],
                                     ),

@@ -22,7 +22,6 @@ class FavoritesScreen extends StatelessWidget {
           return Column(
             children: [
               ScreenHeader(
-                caption: '${songs.length} lagu',
                 title: 'Favorit',
                 trailing: songs.isEmpty
                     ? null

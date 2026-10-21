@@ -4,7 +4,12 @@ import '../theme/theme.dart';
 
 /// Judul besar di atas tiap tab, gaya "large title" iOS.
 class ScreenHeader extends StatelessWidget {
-  const ScreenHeader({super.key, required this.title, this.caption, this.trailing});
+  const ScreenHeader({
+    super.key,
+    required this.title,
+    this.caption,
+    this.trailing,
+  });
 
   final String title;
 
@@ -15,6 +20,7 @@ class ScreenHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 16, 12),
@@ -28,24 +34,11 @@ class ScreenHeader extends StatelessWidget {
                 if (caption != null)
                   Text(
                     caption!.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1,
+                    style: textTheme.labelMedium?.copyWith(
                       color: colors.textTertiary,
                     ),
                   ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: AppTheme.titleFontFamily,
-                    fontSize: 34,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.8,
-                    height: 1.15,
-                    color: colors.textPrimary,
-                  ),
-                ),
+                Text(title, style: textTheme.headlineLarge),
               ],
             ),
           ),

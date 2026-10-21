@@ -37,9 +37,14 @@ class _LyricsViewState extends State<LyricsView> {
     final lines = player.current?.lyrics ?? const [];
     final active = player.lyricIndex;
 
+    final textTheme = Theme.of(context).textTheme;
+
     if (lines.isEmpty) {
-      return const Center(
-        child: Text('Lirik belum tersedia', style: TextStyle(color: Colors.white70, fontSize: 16)),
+      return Center(
+        child: Text(
+          'Lirik belum tersedia',
+          style: textTheme.bodyLarge?.copyWith(color: AppColors.neutral50.withValues(alpha: 0.7)),
+        ),
       );
     }
 
@@ -80,12 +85,10 @@ class _LyricsViewState extends State<LyricsView> {
                     child: AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOut,
-                      style: TextStyle(
-                        fontFamily: AppTheme.titleFontFamily,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w700,
-                        height: 1.25,
-                        color: i == active ? Colors.white : Colors.white.withValues(alpha: 0.32),
+                      style: textTheme.headlineSmall!.copyWith(
+                        color: i == active
+                            ? AppColors.neutral50
+                            : AppColors.neutral50.withValues(alpha: 0.32),
                       ),
                       child: Text(line.text),
                     ),

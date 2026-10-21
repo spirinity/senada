@@ -17,6 +17,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -36,10 +37,10 @@ class SearchField extends StatelessWidget {
                 controller: controller,
                 onChanged: onChanged,
                 textInputAction: TextInputAction.search,
-                style: TextStyle(fontSize: 15, color: colors.textPrimary),
+                style: textTheme.bodyLarge,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: TextStyle(fontSize: 15, color: colors.textTertiary),
+                  hintStyle: textTheme.bodyLarge?.copyWith(color: colors.textTertiary),
                   border: InputBorder.none,
                   isDense: true,
                 ),

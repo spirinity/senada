@@ -31,14 +31,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     super.dispose();
   }
 
-  String get _greeting {
-    final hour = DateTime.now().hour;
-    if (hour < 11) return 'Selamat pagi';
-    if (hour < 15) return 'Selamat siang';
-    if (hour < 18) return 'Selamat sore';
-    return 'Selamat malam';
-  }
-
   @override
   Widget build(BuildContext context) {
     final scope = AppScope.of(context);
@@ -49,7 +41,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         listenable: Listenable.merge([_explore, scope.player, scope.history]),
         builder: (context, _) => Column(
           children: [
-            ScreenHeader(caption: _greeting, title: 'Explore'),
+            ScreenHeader(title: 'Explore'),
             SearchField(
               controller: _search,
               onChanged: _explore.search,
@@ -60,8 +52,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: _explore.isSearching
-                    ? _SearchResults(key: const ValueKey('results'), explore: _explore)
-                    : _Dashboard(key: const ValueKey('dashboard'), songs: _explore.songs),
+                    ? _SearchResults(
+                        key: const ValueKey('results'),
+                        explore: _explore,
+                      )
+                    : _Dashboard(
+                        key: const ValueKey('dashboard'),
+                        songs: _explore.songs,
+                      ),
               ),
             ),
           ],
@@ -84,17 +82,22 @@ class _Dashboard extends StatelessWidget {
 
     return ListView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      padding: EdgeInsets.only(top: 8, bottom: MediaQuery.paddingOf(context).bottom + 16),
+      padding: EdgeInsets.only(
+        top: 8,
+        bottom: MediaQuery.paddingOf(context).bottom + 16,
+      ),
       children: [
         if (recent.isNotEmpty) ...[
-          const _SectionTitle('Baru diputar'),
+          const _SectionTitle('Baru Diputar'),
           _AlbumRow(songs: recent, size: 128),
           const SizedBox(height: 20),
         ],
-        const _SectionTitle('Album pilihan'),
+        const _SectionTitle('Album Pilihan'),
         _AlbumRow(songs: songs, size: 156),
         const SizedBox(height: 20),
-        const _SectionTitle('Lagu populer'),
+        const _SectionTitle('Album Pilihan'),
+        _AlbumRow(songs: songs, size: 156),
+        const _SectionTitle('Lagu Populer'),
         for (final song in songs.take(8))
           SongTile(
             song: song,
@@ -128,13 +131,18 @@ class _SearchResults extends StatelessWidget {
 
     return ListView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      padding: EdgeInsets.only(top: 4, bottom: MediaQuery.paddingOf(context).bottom + 16),
+      padding: EdgeInsets.only(
+        top: 4,
+        bottom: MediaQuery.paddingOf(context).bottom + 16,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
           child: Text(
             '${results.length} hasil',
-            style: TextStyle(fontSize: 13, color: colors.textTertiary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colors.textTertiary),
           ),
         ),
         for (final song in results)
@@ -158,16 +166,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: AppTheme.titleFontFamily,
-          fontSize: 21,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.3,
-          color: context.appColors.textPrimary,
-        ),
-      ),
+      child: Text(text, style: Theme.of(context).textTheme.titleLarge),
     );
   }
 }
@@ -183,6 +182,7 @@ class _AlbumRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = AppScope.of(context).player;
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return SizedBox(
       height: size + 48,
@@ -207,9 +207,7 @@ class _AlbumRow extends StatelessWidget {
                     song.album,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    style: textTheme.labelLarge?.copyWith(
                       color: colors.textPrimary,
                     ),
                   ),
@@ -217,7 +215,9 @@ class _AlbumRow extends StatelessWidget {
                     song.artist,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 12.5, color: colors.textTertiary),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colors.textTertiary,
+                    ),
                   ),
                 ],
               ),

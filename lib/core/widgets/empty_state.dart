@@ -17,6 +17,7 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       // Geser ke atas sebesar bar bawah supaya terlihat di tengah area yang terlihat.
@@ -38,18 +39,13 @@ class EmptyState extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: AppTheme.titleFontFamily,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: colors.textPrimary,
-              ),
+              style: textTheme.titleLarge,
             ),
             const SizedBox(height: 6),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, height: 1.4, color: colors.textTertiary),
+              style: textTheme.bodyMedium?.copyWith(color: colors.textTertiary),
             ),
           ],
         ),

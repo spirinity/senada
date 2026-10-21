@@ -13,6 +13,10 @@ import '../favorites/widgets/favorite_button.dart';
 import 'player_controller.dart';
 import 'widgets/lyrics_view.dart';
 
+// Layar ini selalu di atas artwork gelap, jadi pakai palet netral tetap,
+// bukan token semantic yang berubah mengikuti light/dark mode.
+const _onMedia = AppColors.neutral50;
+
 /// Layar pemutar penuh dengan dua mode: artwork dan lirik.
 class NowPlayingScreen extends StatefulWidget {
   const NowPlayingScreen({super.key});
@@ -32,10 +36,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       listenable: player,
       builder: (context, _) {
         final song = player.current;
-        if (song == null) return const Scaffold(backgroundColor: Colors.black);
+        if (song == null) return const Scaffold(backgroundColor: AppColors.neutral950);
 
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.neutral950,
           body: GestureDetector(
             // Geser ke bawah untuk menutup, seperti sheet di iOS.
             onVerticalDragEnd: (d) {
@@ -110,7 +114,7 @@ class _BlurredBackdrop extends StatelessWidget {
             ),
           ),
         ),
-        ColoredBox(color: Colors.black.withValues(alpha: 0.45)),
+        ColoredBox(color: AppColors.neutral950.withValues(alpha: 0.45)),
       ],
     );
   }
@@ -125,6 +129,8 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -132,25 +138,20 @@ class _TopBar extends StatelessWidget {
           IconButton(
             tooltip: 'Tutup',
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 32, color: Colors.white),
+            icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 32, color: _onMedia),
           ),
           Expanded(
             child: Column(
               children: [
                 Text(
                   'SEDANG DIPUTAR',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.2,
-                    color: Colors.white.withValues(alpha: 0.6),
-                  ),
+                  style: textTheme.labelSmall?.copyWith(color: _onMedia.withValues(alpha: 0.6)),
                 ),
                 Text(
                   album,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white),
+                  style: textTheme.labelLarge?.copyWith(color: _onMedia),
                 ),
               ],
             ),
@@ -159,11 +160,11 @@ class _TopBar extends StatelessWidget {
             tooltip: showLyrics ? 'Sembunyikan lirik' : 'Tampilkan lirik',
             onPressed: onToggleLyrics,
             style: IconButton.styleFrom(
-              backgroundColor: showLyrics ? Colors.white.withValues(alpha: 0.2) : Colors.transparent,
+              backgroundColor: showLyrics ? _onMedia.withValues(alpha: 0.2) : Colors.transparent,
             ),
             icon: Icon(
               showLyrics ? Icons.lyrics_rounded : Icons.lyrics_outlined,
-              color: Colors.white,
+              color: _onMedia,
             ),
           ),
         ],
@@ -195,7 +196,7 @@ class _ArtworkView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
+                    color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.4),
                     blurRadius: 40,
                     offset: const Offset(0, 20),
                   ),
@@ -220,6 +221,8 @@ class _TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Row(
       children: [
         Expanded(
@@ -230,24 +233,19 @@ class _TitleRow extends StatelessWidget {
                 song.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: AppTheme.titleFontFamily,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+                style: textTheme.headlineSmall?.copyWith(color: _onMedia),
               ),
               const SizedBox(height: 2),
               Text(
                 song.artist,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.7)),
+                style: textTheme.bodyLarge?.copyWith(color: _onMedia.withValues(alpha: 0.7)),
               ),
             ],
           ),
         ),
-        FavoriteButton(song: song, color: Colors.white, size: 26),
+        FavoriteButton(song: song, color: _onMedia, size: 26),
       ],
     );
   }
@@ -261,10 +259,9 @@ class _ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeStyle = TextStyle(
-      fontSize: 12,
+    final timeStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
       fontFeatures: const [FontFeature.tabularFigures()],
-      color: Colors.white.withValues(alpha: 0.6),
+      color: _onMedia.withValues(alpha: 0.6),
     );
 
     return Column(
@@ -272,12 +269,12 @@ class _ProgressBar extends StatelessWidget {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 4,
-            activeTrackColor: Colors.white,
-            inactiveTrackColor: Colors.white.withValues(alpha: 0.25),
-            thumbColor: Colors.white,
+            activeTrackColor: _onMedia,
+            inactiveTrackColor: _onMedia.withValues(alpha: 0.25),
+            thumbColor: _onMedia,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
-            overlayColor: Colors.white.withValues(alpha: 0.12),
+            overlayColor: _onMedia.withValues(alpha: 0.12),
             trackShape: const RoundedRectSliderTrackShape(),
           ),
           child: Slider(
@@ -315,7 +312,7 @@ class _Controls extends StatelessWidget {
           tooltip: 'Sebelumnya',
           onPressed: player.previous,
           iconSize: 44,
-          icon: const Icon(Icons.skip_previous_rounded, color: Colors.white),
+          icon: const Icon(Icons.skip_previous_rounded, color: _onMedia),
         ),
         Semantics(
           button: true,
@@ -330,7 +327,7 @@ class _Controls extends StatelessWidget {
             child: Container(
               width: 76,
               height: 76,
-              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              decoration: const BoxDecoration(color: _onMedia, shape: BoxShape.circle),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 180),
                 transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
@@ -338,7 +335,7 @@ class _Controls extends StatelessWidget {
                   player.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                   key: ValueKey(player.isPlaying),
                   size: 42,
-                  color: Colors.black,
+                  color: AppColors.neutral950,
                 ),
               ),
             ),
@@ -348,7 +345,7 @@ class _Controls extends StatelessWidget {
           tooltip: 'Berikutnya',
           onPressed: player.next,
           iconSize: 44,
-          icon: const Icon(Icons.skip_next_rounded, color: Colors.white),
+          icon: const Icon(Icons.skip_next_rounded, color: _onMedia),
         ),
       ],
     );
