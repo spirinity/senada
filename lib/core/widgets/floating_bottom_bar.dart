@@ -31,18 +31,21 @@ class FloatingBottomBar extends StatelessWidget {
           radius: 32,
           child: Padding(
             padding: const EdgeInsets.all(6),
-            child: Row(
+            // Table membagi lebar kolom sama rata.
+            child: Table(
               children: [
-                for (final (i, (icon, activeIcon, label)) in _items.indexed)
-                  Expanded(
-                    child: _NavItem(
-                      icon: icon,
-                      activeIcon: activeIcon,
-                      label: label,
-                      isSelected: i == currentIndex,
-                      onTap: () => onTap(i),
-                    ),
-                  ),
+                TableRow(
+                  children: [
+                    for (final (i, (icon, activeIcon, label)) in _items.indexed)
+                      _NavItem(
+                        icon: icon,
+                        activeIcon: activeIcon,
+                        label: label,
+                        isSelected: i == currentIndex,
+                        onTap: () => onTap(i),
+                      ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -89,18 +92,19 @@ class _NavItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(26),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Spacer(),
               Icon(isSelected ? activeIcon : icon, size: 22, color: color),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: color,
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(
+                  label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: color),
                 ),
               ),
+              const Spacer(),
             ],
           ),
         ),

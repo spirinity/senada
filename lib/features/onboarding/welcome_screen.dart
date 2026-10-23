@@ -3,47 +3,40 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../app/app_routes.dart';
+import '../../core/data/sample_songs.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/artwork.dart';
 import '../../core/widgets/pressable.dart';
 
 class _OnboardingPage {
-  const _OnboardingPage(this.title, this.message, this.covers);
+  const _OnboardingPage(this.title, this.message, this.songIds);
 
   final String title;
   final String message;
 
-  /// Tiga cover album yang ditumpuk sebagai visual utama.
-  final List<String> covers;
+  /// Id tiga lagu di [sampleSongs] yang cover-nya ditumpuk sebagai visual utama.
+  final List<String> songIds;
+
+  List<String> get covers => [
+    for (final id in songIds) sampleSongs.firstWhere((s) => s.id == id).artwork,
+  ];
 }
 
 const _pages = [
   _OnboardingPage(
     'Dengarkan sepenuh hati',
     'Temukan lagu dari artis favoritmu, putar kapan saja, dan nikmati setiap nadanya.',
-    [
-      'assets/albums/dua_lipa_future_nostalgia.jpg',
-      'assets/albums/taylor_swift_1989.jpg',
-      'assets/albums/the_weeknd_after_hours.jpg',
-    ],
+    ['levitating', 'blank-space', 'blinding-lights'],
   ),
   _OnboardingPage(
     'Ikuti setiap lirik',
     'Lirik bergulir mengikuti lagu, jadi kamu bisa ikut bernyanyi tanpa tertinggal satu baris pun.',
-    [
-      'assets/albums/sza_sos.jpg',
-      'assets/albums/frank_ocean_blonde.jpg',
-      'assets/albums/billie_eilish_hit_me_hard_and_soft.jpg',
-    ],
+    ['kill-bill', 'pink-white', 'birds-of-a-feather'],
   ),
   _OnboardingPage(
     'Simpan yang kamu suka',
     'Tandai lagu favorit dan lihat lagi riwayat putarmu kapan pun kamu mau.',
-    [
-      'assets/albums/olivia_rodrigo_sour.jpg',
-      'assets/albums/silk_sonic.jpg',
-      'assets/albums/harry_styles_harrys_house.jpg',
-    ],
+    ['good-4-u', 'leave-the-door-open', 'as-it-was'],
   ),
 ];
 
@@ -82,54 +75,52 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     return Scaffold(
       backgroundColor: colors.bgCanvas,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                child: AnimatedOpacity(
-                  opacity: _isLast ? 0 : 1,
-                  duration: const Duration(milliseconds: 200),
-                  child: TextButton(
-                    onPressed: _isLast ? null : _finish,
-                    style: TextButton.styleFrom(foregroundColor: colors.textPrimary),
-                    child: const Text('Lewati', style: TextStyle(fontSize: 16)),
-                  ),
+      // AppBar dan bottomNavigationBar mengambil tinggi sendiri, sisanya untuk PageView.
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        toolbarHeight: 72,
+        title: Text(
+          'Senada',
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: AnimatedOpacity(
+              opacity: _isLast ? 0 : 1,
+              duration: const Duration(milliseconds: 200),
+              child: TextButton(
+                onPressed: _isLast ? null : _finish,
+                style: TextButton.styleFrom(
+                  foregroundColor: colors.textPrimary,
                 ),
+                child: const Text('Lewati'),
               ),
             ),
-            Text(
-              'Senada',
-              style: TextStyle(
-                fontFamily: AppTheme.titleFontFamily,
-                fontSize: 52,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -1.5,
-                height: 1,
-                color: colors.bgBrand,
-              ),
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _pages.length,
-                onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (context, i) => _PageContent(page: _pages[i]),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 0, 24, 24),
-              child: Row(
-                children: [
-                  _Dots(count: _pages.length, index: _page),
-                  const Spacer(),
-                  _NextButton(isLast: _isLast, onTap: _next),
-                ],
-              ),
-            ),
-          ],
+          ),
+        ],
+      ),
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: _pages.length,
+        onPageChanged: (i) => setState(() => _page = i),
+        itemBuilder: (context, i) => _PageContent(page: _pages[i]),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(32, 0, 24, 24),
+          child: Row(
+            children: [
+              _Dots(count: _pages.length, index: _page),
+              const Spacer(),
+              _NextButton(isLast: _isLast, onTap: _next),
+            ],
+          ),
         ),
       ),
     );
@@ -144,6 +135,7 @@ class _PageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -153,24 +145,29 @@ class _PageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: Center(child: _CoverFan(covers: page.covers))),
+              // Spacer di atas dan bawah memusatkan cover di ruang yang tersisa.
+              const Spacer(),
+              Center(child: _CoverFan(covers: page.covers)),
+              const Spacer(),
               Text(
                 page.title,
-                style: TextStyle(
-                  fontFamily: AppTheme.titleFontFamily,
-                  fontSize: 28,
+                style: textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.6,
                   height: 1.15,
                   color: colors.bgBrand,
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                page.message,
-                style: TextStyle(fontSize: 15, height: 1.5, color: colors.textSecondary),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 28),
+                child: Text(
+                  page.message,
+                  style: textTheme.bodyLarge?.copyWith(
+                    height: 1.5,
+                    color: colors.textSecondary,
+                  ),
+                ),
               ),
-              const SizedBox(height: 28),
             ],
           ),
         ),
@@ -187,55 +184,60 @@ class _CoverFan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final size = math.min(200.0, constraints.maxHeight * 0.6);
+    // Ukuran mengikuti tinggi layar karena Column tidak memberi batas tinggi ke anaknya.
+    final size = math.min(200.0, MediaQuery.sizeOf(context).height * 0.22);
 
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: 1),
-          duration: const Duration(milliseconds: 900),
-          curve: Curves.easeOutCubic,
-          builder: (context, t, _) => SizedBox(
-            width: size * 2,
-            height: size * 1.5,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Bayangan lonjong di "lantai", seperti objek yang melayang.
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    width: size * 1.2,
-                    height: size * 0.12,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(size),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.18 * t),
-                          blurRadius: 30,
-                          spreadRadius: 4,
-                        ),
-                      ],
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 900),
+      curve: Curves.easeOutCubic,
+      builder: (context, t, _) => ConstrainedBox(
+        constraints: BoxConstraints.tightFor(
+          width: size * 2,
+          height: size * 1.5,
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Bayangan lonjong di "lantai", seperti objek yang melayang.
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: size * 1.2,
+                height: size * 0.12,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(size),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.18 * t),
+                      blurRadius: 30,
+                      spreadRadius: 4,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Kiri, kanan, lalu tengah, supaya cover tengah tergambar paling atas.
+            for (final i in const [0, 2, 1])
+              Transform.translate(
+                offset: Offset(
+                  (i - 1) * size * 0.42 * t,
+                  -size * 0.12 + (i == 1 ? -10 * t : 0),
+                ),
+                child: Transform.rotate(
+                  angle: (i - 1) * 0.16 * t,
+                  child: Opacity(
+                    opacity: i == 1 ? 1 : t,
+                    child: _CoverCard(
+                      path: covers[i],
+                      size: i == 1 ? size : size * 0.86,
                     ),
                   ),
                 ),
-                // Kiri, kanan, lalu tengah, supaya cover tengah tergambar paling atas.
-                for (final i in const [0, 2, 1])
-                  Transform.translate(
-                    offset: Offset((i - 1) * size * 0.42 * t, -size * 0.12 + (i == 1 ? -10 * t : 0)),
-                    child: Transform.rotate(
-                      angle: (i - 1) * 0.16 * t,
-                      child: Opacity(
-                        opacity: i == 1 ? 1 : t,
-                        child: _CoverCard(path: covers[i], size: i == 1 ? size : size * 0.86),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -331,28 +333,26 @@ class _NextButton extends StatelessWidget {
               ),
             ],
           ),
+          // FittedBox memusatkan isi dan mengecilkannya selama tombol masih melebar.
           child: ClipRect(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isLast) ...[
-                  Flexible(
-                    child: Text(
-                      'Mulai',
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                      softWrap: false,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: colors.textOnBrand,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                children: [
+                  if (isLast)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Text(
+                        'Mulai',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colors.textOnBrand,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
+                  Icon(Icons.arrow_forward_rounded, color: colors.textOnBrand),
                 ],
-                Icon(Icons.arrow_forward_rounded, color: colors.textOnBrand),
-              ],
+              ),
             ),
           ),
         ),

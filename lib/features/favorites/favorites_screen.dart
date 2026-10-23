@@ -19,38 +19,48 @@ class FavoritesScreen extends StatelessWidget {
         listenable: Listenable.merge([scope.favorites, scope.player]),
         builder: (context, _) {
           final songs = scope.favorites.songs;
-          return Column(
-            children: [
-              ScreenHeader(
-                caption: '${songs.length} lagu',
-                title: 'Favorit',
-                trailing: songs.isEmpty
-                    ? null
-                    : FilledButton.icon(
-                        onPressed: () => scope.player.play(songs.first, queue: songs),
-                        icon: const Icon(Icons.play_arrow_rounded),
-                        label: const Text('Putar'),
-                      ),
-              ),
-              Expanded(
-                child: songs.isEmpty
-                    ? const EmptyState(
-                        icon: Icons.favorite_outline_rounded,
-                        title: 'Belum ada favorit',
-                        message: 'Ketuk ikon hati pada lagu untuk menyimpannya di sini.',
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 16),
-                        itemCount: songs.length,
-                        itemBuilder: (context, i) => SongTile(
-                          key: ValueKey(songs[i].id),
-                          song: songs[i],
-                          isActive: scope.player.current?.id == songs[i].id,
-                          onTap: () => scope.player.play(songs[i], queue: songs),
-                          trailing: FavoriteButton(song: songs[i]),
+          // Satu scroll view: header ikut bergulir, EmptyState mengisi sisa layar.
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: ScreenHeader(
+                  title: 'Favorit',
+                  trailing: songs.isEmpty
+                      ? null
+                      : FilledButton.icon(
+                          onPressed: () =>
+                              scope.player.play(songs.first, queue: songs),
+                          icon: const Icon(Icons.play_arrow_rounded),
+                          label: const Text('Putar'),
                         ),
-                      ),
+                ),
               ),
+              if (songs.isEmpty)
+                const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyState(
+                    icon: Icons.favorite_outline_rounded,
+                    title: 'Belum ada favorit',
+                    message:
+                        'Ketuk ikon hati pada lagu untuk menyimpannya di sini.',
+                  ),
+                )
+              else
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom + 16,
+                  ),
+                  sliver: SliverList.builder(
+                    itemCount: songs.length,
+                    itemBuilder: (context, i) => SongTile(
+                      key: ValueKey(songs[i].id),
+                      song: songs[i],
+                      isActive: scope.player.current?.id == songs[i].id,
+                      onTap: () => scope.player.play(songs[i], queue: songs),
+                      trailing: FavoriteButton(song: songs[i]),
+                    ),
+                  ),
+                ),
             ],
           );
         },

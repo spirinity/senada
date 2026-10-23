@@ -14,20 +14,56 @@ abstract final class AppTheme {
   /// Text theme using Sentient for display/headline/title styles and Switzer elsewhere.
   static TextTheme _buildTextTheme(Color defaultTextColor) {
     return TextTheme(
-      displayLarge: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w700),
-      displayMedium: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w700),
-      displaySmall: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w600),
-      headlineLarge: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w700),
-      headlineMedium: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w600),
-      headlineSmall: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w600),
-      titleLarge: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w600),
-      titleMedium: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w500),
-      titleSmall: const TextStyle(fontFamily: titleFontFamily, fontWeight: FontWeight.w500),
+      displayLarge: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w700,
+      ),
+      displayMedium: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w700,
+      ),
+      displaySmall: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineLarge: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w700,
+      ),
+      headlineMedium: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineSmall: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w600,
+      ),
+      titleMedium: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: const TextStyle(
+        fontFamily: titleFontFamily,
+        fontWeight: FontWeight.w500,
+      ),
       bodyLarge: TextStyle(fontFamily: bodyFontFamily, color: defaultTextColor),
-      bodyMedium: TextStyle(fontFamily: bodyFontFamily, color: defaultTextColor),
+      bodyMedium: TextStyle(
+        fontFamily: bodyFontFamily,
+        color: defaultTextColor,
+      ),
       bodySmall: TextStyle(fontFamily: bodyFontFamily, color: defaultTextColor),
-      labelLarge: const TextStyle(fontFamily: bodyFontFamily, fontWeight: FontWeight.w500),
-      labelMedium: const TextStyle(fontFamily: bodyFontFamily, fontWeight: FontWeight.w500),
+      labelLarge: const TextStyle(
+        fontFamily: bodyFontFamily,
+        fontWeight: FontWeight.w500,
+      ),
+      labelMedium: const TextStyle(
+        fontFamily: bodyFontFamily,
+        fontWeight: FontWeight.w500,
+      ),
       labelSmall: const TextStyle(fontFamily: bodyFontFamily),
     );
   }
@@ -87,9 +123,7 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      extensions: const <ThemeExtension<dynamic>>[
-        semantic,
-      ],
+      extensions: const <ThemeExtension<dynamic>>[semantic],
     );
   }
 
@@ -148,9 +182,7 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      extensions: const <ThemeExtension<dynamic>>[
-        semantic,
-      ],
+      extensions: const <ThemeExtension<dynamic>>[semantic],
     );
   }
 }

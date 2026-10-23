@@ -17,8 +17,14 @@ class HistoryScreen extends StatelessWidget {
         title: const Text('Hapus riwayat?'),
         content: const Text('Semua lagu di riwayat akan dihapus.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Batal')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Hapus')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Hapus'),
+          ),
         ],
       ),
     );
@@ -36,37 +42,50 @@ class HistoryScreen extends StatelessWidget {
         builder: (context, _) {
           final entries = scope.history.entries;
           final songs = [for (final e in entries) e.song];
-          return Column(
-            children: [
-              ScreenHeader(
-                caption: '${entries.length} lagu diputar',
-                title: 'Riwayat',
-                trailing: entries.isEmpty
-                    ? null
-                    : TextButton(onPressed: () => _confirmClear(context), child: const Text('Hapus')),
+          // Satu scroll view: header ikut bergulir, EmptyState mengisi sisa layar.
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: ScreenHeader(
+                  title: 'Riwayat',
+                  trailing: entries.isEmpty
+                      ? null
+                      : TextButton(
+                          onPressed: () => _confirmClear(context),
+                          child: const Text('Hapus'),
+                        ),
+                ),
               ),
-              Expanded(
-                child: entries.isEmpty
-                    ? const EmptyState(
-                        icon: Icons.history_rounded,
-                        title: 'Belum ada riwayat',
-                        message: 'Lagu yang kamu putar akan muncul di sini.',
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 16),
-                        itemCount: entries.length,
-                        itemBuilder: (context, i) {
-                          final entry = entries[i];
-                          return SongTile(
-                            key: ValueKey(entry.song.id),
-                            song: entry.song,
-                            subtitle: '${entry.song.artist} · ${timeAgo(entry.playedAt)}',
-                            isActive: scope.player.current?.id == entry.song.id,
-                            onTap: () => scope.player.play(entry.song, queue: songs),
-                          );
-                        },
-                      ),
-              ),
+              if (entries.isEmpty)
+                const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyState(
+                    icon: Icons.history_rounded,
+                    title: 'Belum ada riwayat',
+                    message: 'Lagu yang kamu putar akan muncul di sini.',
+                  ),
+                )
+              else
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom + 16,
+                  ),
+                  sliver: SliverList.builder(
+                    itemCount: entries.length,
+                    itemBuilder: (context, i) {
+                      final entry = entries[i];
+                      return SongTile(
+                        key: ValueKey(entry.song.id),
+                        song: entry.song,
+                        subtitle:
+                            '${entry.song.artist} · ${timeAgo(entry.playedAt)}',
+                        isActive: scope.player.current?.id == entry.song.id,
+                        onTap: () =>
+                            scope.player.play(entry.song, queue: songs),
+                      );
+                    },
+                  ),
+                ),
             ],
           );
         },

@@ -37,9 +37,16 @@ class _LyricsViewState extends State<LyricsView> {
     final lines = player.current?.lyrics ?? const [];
     final active = player.lyricIndex;
 
+    final textTheme = Theme.of(context).textTheme;
+
     if (lines.isEmpty) {
-      return const Center(
-        child: Text('Lirik belum tersedia', style: TextStyle(color: Colors.white70, fontSize: 16)),
+      return Center(
+        child: Text(
+          'Lirik belum tersedia',
+          style: textTheme.bodyLarge?.copyWith(
+            color: AppColors.neutral50.withValues(alpha: 0.7),
+          ),
+        ),
       );
     }
 
@@ -59,7 +66,12 @@ class _LyricsViewState extends State<LyricsView> {
       shaderCallback: (rect) => const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Colors.transparent, Colors.white, Colors.white, Colors.transparent],
+        colors: [
+          Colors.transparent,
+          Colors.white,
+          Colors.white,
+          Colors.transparent,
+        ],
         stops: [0, 0.12, 0.85, 1],
       ).createShader(rect),
       // Semua baris dibangun sekaligus agar ensureVisible selalu menemukan barisnya.
@@ -75,17 +87,17 @@ class _LyricsViewState extends State<LyricsView> {
                 scale: 0.98,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    width: double.infinity,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.tightFor(
+                      width: double.infinity,
+                    ),
                     child: AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOut,
-                      style: TextStyle(
-                        fontFamily: AppTheme.titleFontFamily,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w700,
-                        height: 1.25,
-                        color: i == active ? Colors.white : Colors.white.withValues(alpha: 0.32),
+                      style: textTheme.headlineSmall!.copyWith(
+                        color: i == active
+                            ? AppColors.neutral50
+                            : AppColors.neutral50.withValues(alpha: 0.32),
                       ),
                       child: Text(line.text),
                     ),
