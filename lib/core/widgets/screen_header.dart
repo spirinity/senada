@@ -22,29 +22,23 @@ class ScreenHeader extends StatelessWidget {
     final colors = context.appColors;
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 16, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+    return ListTile(
+      contentPadding: const EdgeInsets.fromLTRB(20, 16, 16, 12),
+      minVerticalPadding: 0,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (caption != null)
-                  Text(
-                    caption!.toUpperCase(),
-                    style: textTheme.labelMedium?.copyWith(
-                      color: colors.textTertiary,
-                    ),
-                  ),
-                Text(title, style: textTheme.headlineLarge),
-              ],
+          if (caption != null)
+            Text(
+              caption!.toUpperCase(),
+              style: textTheme.labelMedium?.copyWith(
+                color: colors.textTertiary,
+              ),
             ),
-          ),
-          ?trailing,
+          Text(title, style: textTheme.headlineLarge),
         ],
       ),
+      trailing: trailing,
     );
   }
 }

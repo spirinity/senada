@@ -39,29 +39,22 @@ class _ExploreScreenState extends State<ExploreScreen> {
       bottom: false,
       child: ListenableBuilder(
         listenable: Listenable.merge([_explore, scope.player, scope.history]),
-        builder: (context, _) => Column(
-          children: [
-            ScreenHeader(title: 'Explore'),
-            SearchField(
-              controller: _search,
-              onChanged: _explore.search,
-              hintText: 'Cari lagu, artis, atau album',
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: _explore.isSearching
-                    ? _SearchResults(
-                        key: const ValueKey('results'),
-                        explore: _explore,
-                      )
-                    : _Dashboard(
-                        key: const ValueKey('dashboard'),
-                        songs: _explore.songs,
-                      ),
+        // Satu scroll view: header, pencarian, dan isi bergulir bersama.
+        builder: (context, _) => CustomScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          slivers: [
+            const SliverToBoxAdapter(child: ScreenHeader(title: 'Explore')),
+            SliverToBoxAdapter(
+              child: SearchField(
+                controller: _search,
+                onChanged: _explore.search,
+                hintText: 'Cari lagu, artis, atau album',
               ),
             ),
+            if (_explore.isSearching)
+              _SearchResults(explore: _explore)
+            else
+              _Dashboard(songs: _explore.songs),
           ],
         ),
       ),
@@ -70,7 +63,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 }
 
 class _Dashboard extends StatelessWidget {
-  const _Dashboard({super.key, required this.songs});
+  const _Dashboard({required this.songs});
 
   final List<Song> songs;
 
@@ -80,38 +73,41 @@ class _Dashboard extends StatelessWidget {
     final recent = scope.history.entries.take(8).map((e) => e.song).toList();
     final current = scope.player.current;
 
-    return ListView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    return SliverPadding(
       padding: EdgeInsets.only(
-        top: 8,
+        top: 16,
         bottom: MediaQuery.paddingOf(context).bottom + 16,
       ),
-      children: [
-        if (recent.isNotEmpty) ...[
-          const _SectionTitle('Baru Diputar'),
-          _AlbumRow(songs: recent, size: 128),
-          const SizedBox(height: 20),
-        ],
-        const _SectionTitle('Album Pilihan'),
-        _AlbumRow(songs: songs, size: 156),
-        const SizedBox(height: 20),
-        const _SectionTitle('Album Pilihan'),
-        _AlbumRow(songs: songs, size: 156),
-        const _SectionTitle('Lagu Populer'),
-        for (final song in songs.take(8))
-          SongTile(
-            song: song,
-            isActive: current?.id == song.id,
-            onTap: () => scope.player.play(song, queue: songs),
-            trailing: FavoriteButton(song: song),
+      sliver: SliverList.list(
+        children: [
+          if (recent.isNotEmpty) ...[
+            const _SectionTitle('Baru Diputar'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: _AlbumRow(songs: recent, size: 128),
+            ),
+          ],
+          const _SectionTitle('Album Pilihan'),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: _AlbumRow(songs: songs, size: 156),
           ),
-      ],
+          const _SectionTitle('Lagu Populer'),
+          for (final song in songs.take(8))
+            SongTile(
+              song: song,
+              isActive: current?.id == song.id,
+              onTap: () => scope.player.play(song, queue: songs),
+              trailing: FavoriteButton(song: song),
+            ),
+        ],
+      ),
     );
   }
 }
 
 class _SearchResults extends StatelessWidget {
-  const _SearchResults({super.key, required this.explore});
+  const _SearchResults({required this.explore});
 
   final ExploreController explore;
 
@@ -122,37 +118,41 @@ class _SearchResults extends StatelessWidget {
     final colors = context.appColors;
 
     if (results.isEmpty) {
-      return EmptyState(
-        icon: Icons.search_off_rounded,
-        title: 'Tidak ada hasil',
-        message: 'Coba kata kunci lain untuk "${explore.query.trim()}".',
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: EmptyState(
+          icon: Icons.search_off_rounded,
+          title: 'Tidak ada hasil',
+          message: 'Coba kata kunci lain untuk "${explore.query.trim()}".',
+        ),
       );
     }
 
-    return ListView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    return SliverPadding(
       padding: EdgeInsets.only(
-        top: 4,
+        top: 12,
         bottom: MediaQuery.paddingOf(context).bottom + 16,
       ),
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
-          child: Text(
-            '${results.length} hasil',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: colors.textTertiary),
+      sliver: SliverList.list(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            child: Text(
+              '${results.length} hasil',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.textTertiary),
+            ),
           ),
-        ),
-        for (final song in results)
-          SongTile(
-            song: song,
-            isActive: scope.player.current?.id == song.id,
-            onTap: () => scope.player.play(song, queue: results),
-            trailing: FavoriteButton(song: song),
-          ),
-      ],
+          for (final song in results)
+            SongTile(
+              song: song,
+              isActive: scope.player.current?.id == song.id,
+              onTap: () => scope.player.play(song, queue: results),
+              trailing: FavoriteButton(song: song),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -184,42 +184,47 @@ class _AlbumRow extends StatelessWidget {
     final colors = context.appColors;
     final textTheme = Theme.of(context).textTheme;
 
-    return SizedBox(
-      height: size + 48,
-      child: ListView.separated(
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(height: size + 48),
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: songs.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemBuilder: (context, i) {
           final song = songs[i];
-          return Pressable(
-            onTap: () => player.play(song, queue: songs),
-            borderRadius: BorderRadius.circular(14),
-            child: SizedBox(
-              width: size,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Artwork(song.artwork, size: size, radius: 14),
-                  const SizedBox(height: 8),
-                  Text(
-                    song.album,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.labelLarge?.copyWith(
-                      color: colors.textPrimary,
+          // Jarak antar-kartu lewat padding; kartu terakhir tidak diberi jarak.
+          return Padding(
+            padding: EdgeInsets.only(right: i == songs.length - 1 ? 0 : 14),
+            child: Pressable(
+              onTap: () => player.play(song, queue: songs),
+              borderRadius: BorderRadius.circular(14),
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tightFor(width: size),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Artwork(song.artwork, size: size, radius: 14),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        song.album,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.labelLarge?.copyWith(
+                          color: colors.textPrimary,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    song.artist,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colors.textTertiary,
+                    Text(
+                      song.artist,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colors.textTertiary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

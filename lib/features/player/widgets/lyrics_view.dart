@@ -43,7 +43,9 @@ class _LyricsViewState extends State<LyricsView> {
       return Center(
         child: Text(
           'Lirik belum tersedia',
-          style: textTheme.bodyLarge?.copyWith(color: AppColors.neutral50.withValues(alpha: 0.7)),
+          style: textTheme.bodyLarge?.copyWith(
+            color: AppColors.neutral50.withValues(alpha: 0.7),
+          ),
         ),
       );
     }
@@ -64,7 +66,12 @@ class _LyricsViewState extends State<LyricsView> {
       shaderCallback: (rect) => const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Colors.transparent, Colors.white, Colors.white, Colors.transparent],
+        colors: [
+          Colors.transparent,
+          Colors.white,
+          Colors.white,
+          Colors.transparent,
+        ],
         stops: [0, 0.12, 0.85, 1],
       ).createShader(rect),
       // Semua baris dibangun sekaligus agar ensureVisible selalu menemukan barisnya.
@@ -80,8 +87,10 @@ class _LyricsViewState extends State<LyricsView> {
                 scale: 0.98,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    width: double.infinity,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.tightFor(
+                      width: double.infinity,
+                    ),
                     child: AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOut,

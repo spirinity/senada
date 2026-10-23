@@ -30,7 +30,7 @@ abstract final class AppColors {
   static const Color primary600 = Color(0xFF911CFF);
 
   /// `primary-700`: `oklch(47.6% 0.255 299)` -> `#7601D3`
-  static const Color primary700 = Color(0xFFFFFF);
+  static const Color primary700 = Color(0xFF7601D3);
 
   /// `primary-800`: `oklch(39.7% 0.213 298.8)` -> `#5B00A6`
   static const Color primary800 = Color(0xFF5B00A6);

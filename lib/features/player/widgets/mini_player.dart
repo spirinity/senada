@@ -5,6 +5,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/artwork.dart';
 import '../../../core/widgets/glass_surface.dart';
 import '../../../core/widgets/pressable.dart';
+import '../now_playing_screen.dart';
 
 /// Player kecil di atas bottom bar; hanya muncul bila ada lagu aktif.
 class MiniPlayer extends StatelessWidget {
@@ -26,7 +27,8 @@ class MiniPlayer extends StatelessWidget {
           duration: const Duration(milliseconds: 350),
           curve: Curves.easeOutCubic,
           child: song == null
-              ? const SizedBox(width: double.infinity)
+              // Penuh lebar, tinggi 0: AnimatedSize hanya menganimasikan tinggi.
+              ? Container(width: double.infinity)
               : Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                   child: Pressable(
@@ -35,44 +37,56 @@ class MiniPlayer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     child: GlassSurface(
                       radius: 20,
-                      child: SizedBox(
-                        height: 62,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints.tightFor(height: 62),
                         child: Stack(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(9, 9, 4, 9),
-                              child: Row(
+                            ListTile(
+                              contentPadding: const EdgeInsets.fromLTRB(
+                                9,
+                                0,
+                                4,
+                                0,
+                              ),
+                              minVerticalPadding: 0,
+                              minTileHeight: 62,
+                              horizontalTitleGap: 12,
+                              leading: Hero(
+                                tag: nowPlayingArtworkTag,
+                                child: Artwork(
+                                  song.artwork,
+                                  size: 44,
+                                  radius: 10,
+                                ),
+                              ),
+                              title: Text(
+                                song.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.labelLarge?.copyWith(
+                                  color: colors.textPrimary,
+                                ),
+                              ),
+                              subtitle: Text(
+                                song.artist,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: colors.textTertiary,
+                                ),
+                              ),
+                              // Wrap membungkus kedua tombol sesempit isinya di dalam trailing.
+                              trailing: Wrap(
                                 children: [
-                                  Hero(
-                                    tag: 'now-playing-artwork',
-                                    child: Artwork(song.artwork, size: 44, radius: 10),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          song.title,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.labelLarge?.copyWith(color: colors.textPrimary),
-                                        ),
-                                        Text(
-                                          song.artist,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.bodySmall?.copyWith(color: colors.textTertiary),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                   IconButton(
-                                    tooltip: player.isPlaying ? 'Jeda' : 'Putar',
+                                    tooltip: player.isPlaying
+                                        ? 'Jeda'
+                                        : 'Putar',
                                     onPressed: player.togglePlay,
                                     icon: Icon(
-                                      player.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                      player.isPlaying
+                                          ? Icons.pause_rounded
+                                          : Icons.play_arrow_rounded,
                                       size: 30,
                                       color: colors.textPrimary,
                                     ),
@@ -80,7 +94,11 @@ class MiniPlayer extends StatelessWidget {
                                   IconButton(
                                     tooltip: 'Berikutnya',
                                     onPressed: player.next,
-                                    icon: Icon(Icons.skip_next_rounded, size: 28, color: colors.textPrimary),
+                                    icon: Icon(
+                                      Icons.skip_next_rounded,
+                                      size: 28,
+                                      color: colors.textPrimary,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -89,19 +107,12 @@ class MiniPlayer extends StatelessWidget {
                               left: 20,
                               right: 20,
                               bottom: 0,
-                              height: 2,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: FractionallySizedBox(
-                                  widthFactor: player.progress.clamp(0, 1),
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: colors.bgBrand,
-                                      borderRadius: BorderRadius.circular(1),
-                                    ),
-                                    child: const SizedBox.expand(),
-                                  ),
-                                ),
+                              child: LinearProgressIndicator(
+                                value: player.progress.clamp(0, 1),
+                                minHeight: 2,
+                                color: colors.bgBrand,
+                                backgroundColor: Colors.transparent,
+                                borderRadius: BorderRadius.circular(1),
                               ),
                             ),
                           ],
