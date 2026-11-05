@@ -14,7 +14,6 @@ class Song {
     required this.album,
     required this.artwork,
     required this.duration,
-    this.lyrics = const [],
   });
 
   final String id;
@@ -25,5 +24,4 @@ class Song {
   /// Path asset gambar album.
   final String artwork;
   final Duration duration;
-  final List<LyricLine> lyrics;
 }

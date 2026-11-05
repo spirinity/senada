@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../../core/data/lyrics_api.dart';
 import '../../core/models/song.dart';
 import '../history/history_controller.dart';
 
@@ -18,10 +19,14 @@ class PlayerController extends ChangeNotifier {
   bool _isPlaying = false;
   Duration _position = Duration.zero;
   Timer? _timer;
+  List<LyricLine>? _lyrics;
 
   Song? get current => _index < 0 ? null : _queue[_index];
   bool get isPlaying => _isPlaying;
   Duration get position => _position;
+
+  /// Lirik lagu yang sedang diputar; null selama masih dimuat dari LRCLIB.
+  List<LyricLine>? get lyrics => _lyrics;
 
   double get progress {
     final song = current;
@@ -31,7 +36,7 @@ class PlayerController extends ChangeNotifier {
 
   /// Indeks baris lirik yang sedang dinyanyikan, -1 bila belum ada.
   int get lyricIndex =>
-      (current?.lyrics ?? const <LyricLine>[]).lastIndexWhere((l) => l.time <= _position);
+      (_lyrics ?? const <LyricLine>[]).lastIndexWhere((l) => l.time <= _position);
 
   /// Putar [song]; [queue] menentukan urutan lagu untuk next/previous.
   void play(Song song, {List<Song>? queue}) {
@@ -73,8 +78,19 @@ class PlayerController extends ChangeNotifier {
 
   void _start() {
     _position = Duration.zero;
+    _lyrics = null;
     _history.add(current!);
     _setPlaying(true);
+    _loadLyrics(current!);
+  }
+
+  /// Ambil lirik di latar belakang supaya lagu tetap langsung diputar.
+  Future<void> _loadLyrics(Song song) async {
+    final lines = await fetchLyrics(song);
+    // Abaikan hasil lama bila user sudah pindah lagu sebelum request selesai.
+    if (current?.id != song.id) return;
+    _lyrics = lines;
+    notifyListeners();
   }
 
   void _setPlaying(bool playing) {

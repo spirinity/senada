@@ -146,11 +146,7 @@ class _BlurredBackdrop extends StatelessWidget {
               scale: 1.5,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                child: Image.asset(
-                  song.artwork,
-                  fit: BoxFit.cover,
-                  excludeFromSemantics: true,
-                ),
+                child: Artwork(song.artwork, radius: 0),
               ),
             ),
           ),
@@ -405,11 +401,14 @@ class _Controls extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        IconButton(
-          tooltip: 'Berikutnya',
-          onPressed: player.next,
-          iconSize: 44,
-          icon: const Icon(Icons.skip_next_rounded, color: _onMedia),
+        GestureDetector(
+          onHorizontalDragEnd: (DragEndDetails details) => player.next(),
+          child: IconButton(
+            tooltip: 'Berikutnya',
+            onPressed: player.next,
+            iconSize: 44,
+            icon: const Icon(Icons.skip_next_rounded, color: _onMedia),
+          ),
         ),
         const Spacer(),
       ],
