@@ -117,6 +117,24 @@ class _SearchResults extends StatelessWidget {
     final results = explore.results;
     final colors = context.appColors;
 
+    if (explore.isLoading) {
+      return const SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (explore.hasError) {
+      return const SliverFillRemaining(
+        hasScrollBody: false,
+        child: EmptyState(
+          icon: Icons.wifi_off_rounded,
+          title: 'Gagal memuat',
+          message: 'Periksa koneksi internet lalu coba lagi.',
+        ),
+      );
+    }
+
     if (results.isEmpty) {
       return SliverFillRemaining(
         hasScrollBody: false,

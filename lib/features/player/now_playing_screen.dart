@@ -146,11 +146,7 @@ class _BlurredBackdrop extends StatelessWidget {
               scale: 1.5,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                child: Image.asset(
-                  song.artwork,
-                  fit: BoxFit.cover,
-                  excludeFromSemantics: true,
-                ),
+                child: Artwork(song.artwork, radius: 0),
               ),
             ),
           ),
