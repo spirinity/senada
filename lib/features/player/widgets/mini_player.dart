@@ -40,7 +40,7 @@ class MiniPlayer extends StatelessWidget {
             curve: Curves.easeOutCubic,
             child: song == null
                 // Penuh lebar, tinggi 0: AnimatedSize hanya menganimasikan tinggi.
-                ? Container(width: double.infinity)
+                ? const SizedBox(width: double.infinity, height: 0)
                 : Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                     child: Pressable(
