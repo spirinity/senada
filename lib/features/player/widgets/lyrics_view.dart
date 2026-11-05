@@ -34,7 +34,7 @@ class _LyricsViewState extends State<LyricsView> {
   @override
   Widget build(BuildContext context) {
     final player = widget.player;
-    final lines = player.current?.lyrics ?? const [];
+    final lines = player.lyrics ?? const [];
     final active = player.lyricIndex;
 
     final textTheme = Theme.of(context).textTheme;
@@ -42,7 +42,7 @@ class _LyricsViewState extends State<LyricsView> {
     if (lines.isEmpty) {
       return Center(
         child: Text(
-          'Lirik belum tersedia',
+          player.lyrics == null ? 'Memuat lirik...' : 'Lirik belum tersedia',
           style: textTheme.bodyLarge?.copyWith(
             color: AppColors.neutral50.withValues(alpha: 0.7),
           ),
