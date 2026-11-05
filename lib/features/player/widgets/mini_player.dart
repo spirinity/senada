@@ -23,104 +23,119 @@ class MiniPlayer extends StatelessWidget {
       listenable: player,
       builder: (context, _) {
         final song = player.current;
-        return AnimatedSize(
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeOutCubic,
-          child: song == null
-              // Penuh lebar, tinggi 0: AnimatedSize hanya menganimasikan tinggi.
-              ? Container(width: double.infinity)
-              : Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                  child: Pressable(
-                    onTap: onTap,
-                    scale: 0.98,
-                    borderRadius: BorderRadius.circular(20),
-                    child: GlassSurface(
-                      radius: 20,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(height: 62),
-                        child: Stack(
-                          children: [
-                            ListTile(
-                              contentPadding: const EdgeInsets.fromLTRB(
-                                9,
-                                0,
-                                4,
-                                0,
-                              ),
-                              minVerticalPadding: 0,
-                              minTileHeight: 62,
-                              horizontalTitleGap: 12,
-                              leading: Hero(
-                                tag: nowPlayingArtworkTag,
-                                child: Artwork(
-                                  song.artwork,
-                                  size: 44,
-                                  radius: 10,
+        return GestureDetector(
+          onHorizontalDragEnd: (DragEndDetails details) {
+            if (details.primaryVelocity == 0) {
+              return;
+            } // user have just tapped on screen (no dragging)
+            if (details.primaryVelocity!.compareTo(0) == -1) {
+              player.previous();
+            }
+            if (details.primaryVelocity!.compareTo(0) == 1) {
+              player.next();
+            }
+          },
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOutCubic,
+            child: song == null
+                // Penuh lebar, tinggi 0: AnimatedSize hanya menganimasikan tinggi.
+                ? Container(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: Pressable(
+                      onTap: onTap,
+                      scale: 0.98,
+                      borderRadius: BorderRadius.circular(20),
+                      child: GlassSurface(
+                        radius: 20,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints.tightFor(
+                            height: 62,
+                          ),
+                          child: Stack(
+                            children: [
+                              ListTile(
+                                contentPadding: const EdgeInsets.fromLTRB(
+                                  9,
+                                  0,
+                                  4,
+                                  0,
                                 ),
-                              ),
-                              title: Text(
-                                song.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.labelLarge?.copyWith(
-                                  color: colors.textPrimary,
-                                ),
-                              ),
-                              subtitle: Text(
-                                song.artist,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.bodySmall?.copyWith(
-                                  color: colors.textTertiary,
-                                ),
-                              ),
-                              // Wrap membungkus kedua tombol sesempit isinya di dalam trailing.
-                              trailing: Wrap(
-                                children: [
-                                  IconButton(
-                                    tooltip: player.isPlaying
-                                        ? 'Jeda'
-                                        : 'Putar',
-                                    onPressed: player.togglePlay,
-                                    icon: Icon(
-                                      player.isPlaying
-                                          ? Icons.pause_rounded
-                                          : Icons.play_arrow_rounded,
-                                      size: 30,
-                                      color: colors.textPrimary,
-                                    ),
+                                minVerticalPadding: 0,
+                                minTileHeight: 62,
+                                horizontalTitleGap: 12,
+                                leading: Hero(
+                                  tag: nowPlayingArtworkTag,
+                                  child: Artwork(
+                                    song.artwork,
+                                    size: 44,
+                                    radius: 10,
                                   ),
-                                  IconButton(
-                                    tooltip: 'Berikutnya',
-                                    onPressed: player.next,
-                                    icon: Icon(
-                                      Icons.skip_next_rounded,
-                                      size: 28,
-                                      color: colors.textPrimary,
-                                    ),
+                                ),
+                                title: Text(
+                                  song.title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.labelLarge?.copyWith(
+                                    color: colors.textPrimary,
                                   ),
-                                ],
+                                ),
+                                subtitle: Text(
+                                  song.artist,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: colors.textTertiary,
+                                  ),
+                                ),
+                                // Wrap membungkus kedua tombol sesempit isinya di dalam trailing.
+                                trailing: Wrap(
+                                  children: [
+                                    IconButton(
+                                      tooltip: player.isPlaying
+                                          ? 'Jeda'
+                                          : 'Putar',
+                                      onPressed: player.togglePlay,
+                                      icon: Icon(
+                                        player.isPlaying
+                                            ? Icons.pause_rounded
+                                            : Icons.play_arrow_rounded,
+                                        size: 30,
+                                        color: colors.textPrimary,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      tooltip: 'Berikutnya',
+                                      onPressed: player.next,
+                                      icon: Icon(
+                                        Icons.skip_next_rounded,
+                                        size: 28,
+                                        color: colors.textPrimary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              left: 20,
-                              right: 20,
-                              bottom: 0,
-                              child: LinearProgressIndicator(
-                                value: player.progress.clamp(0, 1),
-                                minHeight: 2,
-                                color: colors.bgBrand,
-                                backgroundColor: Colors.transparent,
-                                borderRadius: BorderRadius.circular(1),
+                              Positioned(
+                                left: 20,
+                                right: 20,
+                                bottom: 0,
+                                child: LinearProgressIndicator(
+                                  value: player.progress.clamp(0, 1),
+                                  minHeight: 2,
+                                  color: colors.bgBrand,
+                                  backgroundColor: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(1),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+          ),
         );
       },
     );

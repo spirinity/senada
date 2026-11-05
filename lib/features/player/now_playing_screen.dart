@@ -405,11 +405,14 @@ class _Controls extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        IconButton(
-          tooltip: 'Berikutnya',
-          onPressed: player.next,
-          iconSize: 44,
-          icon: const Icon(Icons.skip_next_rounded, color: _onMedia),
+        GestureDetector(
+          onHorizontalDragEnd: (DragEndDetails details) => player.next(),
+          child: IconButton(
+            tooltip: 'Berikutnya',
+            onPressed: player.next,
+            iconSize: 44,
+            icon: const Icon(Icons.skip_next_rounded, color: _onMedia),
+          ),
         ),
         const Spacer(),
       ],
