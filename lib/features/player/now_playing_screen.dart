@@ -8,6 +8,7 @@ import '../../core/models/song.dart';
 import '../../core/theme/theme.dart';
 import '../../core/utils/format.dart';
 import '../../core/widgets/artwork.dart';
+import '../../core/widgets/jamendo_credit.dart';
 import '../../core/widgets/pressable.dart';
 import '../favorites/widgets/favorite_button.dart';
 import 'player_controller.dart';
@@ -87,6 +88,17 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: _Controls(player: player),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: JamendoCredit(
+                            song: song,
+                            color: _onMedia.withValues(alpha: 0.6),
+                          ),
                         ),
                       ],
                     ),
