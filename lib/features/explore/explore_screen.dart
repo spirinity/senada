@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_routes.dart';
 import '../../app/app_scope.dart';
 import '../../core/models/song.dart';
 import '../../core/theme/theme.dart';
@@ -23,6 +24,9 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   final _explore = ExploreController();
   final _search = TextEditingController();
+
+  /// Tab hasil yang dipilih: 0 = Lagu, 1 = Album, 2 = Artis.
+  int _tab = 0;
 
   @override
   void dispose() {
@@ -51,9 +55,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 hintText: 'Cari lagu, artis, atau album',
               ),
             ),
-            if (_explore.isSearching)
-              _SearchResults(explore: _explore)
-            else
+            if (_explore.isSearching) ...[
+              SliverToBoxAdapter(
+                child: _SearchTabs(
+                  selected: _tab,
+                  onSelected: (i) => setState(() => _tab = i),
+                ),
+              ),
+              _SearchResults(explore: _explore, tab: _tab),
+            ] else
               _Dashboard(songs: _explore.songs),
           ],
         ),
@@ -106,15 +116,53 @@ class _Dashboard extends StatelessWidget {
   }
 }
 
+/// Pilihan tab hasil pencarian.
+class _SearchTabs extends StatelessWidget {
+  const _SearchTabs({required this.selected, required this.onSelected});
+
+  final int selected;
+  final ValueChanged<int> onSelected;
+
+  static const _labels = ['Lagu', 'Album', 'Artis'];
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: Row(
+        children: [
+          for (final (i, label) in _labels.indexed)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: Text(label),
+                selected: i == selected,
+                onSelected: (_) => onSelected(i),
+                showCheckmark: false,
+                shape: const StadiumBorder(),
+                selectedColor: colorScheme.primary,
+                labelStyle: TextStyle(
+                  color: i == selected ? colorScheme.onPrimary : null,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SearchResults extends StatelessWidget {
-  const _SearchResults({required this.explore});
+  const _SearchResults({required this.explore, required this.tab});
 
   final ExploreController explore;
+  final int tab;
 
   @override
   Widget build(BuildContext context) {
     final scope = AppScope.of(context);
-    final results = explore.results;
     final colors = context.appColors;
 
     if (explore.isLoading) {
@@ -134,6 +182,43 @@ class _SearchResults extends StatelessWidget {
         ),
       );
     }
+
+    // Isi daftar sesuai tab yang dipilih.
+    final List<Widget> results = switch (tab) {
+      0 => [
+        for (final song in explore.songResults)
+          SongTile(
+            song: song,
+            isActive: scope.player.current?.id == song.id,
+            onTap: () => scope.player.play(song, queue: explore.songResults),
+            trailing: FavoriteButton(song: song),
+          ),
+      ],
+      1 => [
+        for (final album in explore.albumResults)
+          _ResultTile(
+            artwork: album.artwork,
+            title: album.title,
+            subtitle: album.subtitle,
+            onTap: () =>
+                Navigator.pushNamed(context, AppRoutes.album, arguments: album),
+          ),
+      ],
+      _ => [
+        for (final artist in explore.artistResults)
+          _ResultTile(
+            artwork: artist.photo,
+            title: artist.name,
+            subtitle: 'Artis',
+            circle: true,
+            onTap: () => Navigator.pushNamed(
+              context,
+              AppRoutes.artist,
+              arguments: artist,
+            ),
+          ),
+      ],
+    };
 
     if (results.isEmpty) {
       return SliverFillRemaining(
@@ -162,14 +247,61 @@ class _SearchResults extends StatelessWidget {
               ).textTheme.bodySmall?.copyWith(color: colors.textTertiary),
             ),
           ),
-          for (final song in results)
-            SongTile(
-              song: song,
-              isActive: scope.player.current?.id == song.id,
-              onTap: () => scope.player.play(song, queue: results),
-              trailing: FavoriteButton(song: song),
-            ),
+          ...results,
         ],
+      ),
+    );
+  }
+}
+
+/// Baris hasil album atau artis; ketuk untuk membuka halamannya.
+class _ResultTile extends StatelessWidget {
+  const _ResultTile({
+    required this.artwork,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.circle = false,
+  });
+
+  final String artwork;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  /// Foto artis dibuat bulat.
+  final bool circle;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Pressable(
+      onTap: onTap,
+      scale: 0.98,
+      child: ListTile(
+        contentPadding: const EdgeInsets.fromLTRB(20, 0, 12, 0),
+        minVerticalPadding: 6,
+        minTileHeight: 64,
+        horizontalTitleGap: 14,
+        leading: Artwork(artwork, size: 52, radius: circle ? 26 : 10),
+        title: Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textTheme.labelLarge?.copyWith(color: colors.textPrimary),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.bodySmall?.copyWith(color: colors.textTertiary),
+          ),
+        ),
+        trailing: Icon(Icons.chevron_right_rounded, color: colors.textTertiary),
       ),
     );
   }
