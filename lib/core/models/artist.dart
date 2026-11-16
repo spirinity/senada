@@ -1,7 +1,7 @@
 class Artist {
   const Artist({required this.id, required this.name, required this.photo});
 
-  /// browseId YouTube Music.
+  /// Id artis Jamendo.
   final String id;
   final String name;
 

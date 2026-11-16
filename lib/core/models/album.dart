@@ -7,7 +7,7 @@ class Album {
     required this.artwork,
   });
 
-  /// browseId YouTube Music, dipakai untuk mengambil daftar lagu album.
+  /// Id album Jamendo, dipakai untuk mengambil daftar lagu album.
   final String id;
   final String title;
   final String artist;

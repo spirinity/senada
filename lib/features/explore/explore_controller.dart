@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../../core/data/muzo_api.dart';
+import '../../core/data/jamendo_api.dart';
 import '../../core/data/sample_songs.dart';
 import '../../core/models/album.dart';
 import '../../core/models/artist.dart';
@@ -30,7 +30,7 @@ class ExploreController extends ChangeNotifier {
   bool get hasError => _hasError;
   bool get isSearching => _query.trim().isNotEmpty;
 
-  /// Dipanggil setiap ketikan. Muzo lambat (bisa sampai 5 detik), jadi request
+  /// Dipanggil setiap ketikan. Request jaringan bisa lambat, jadi request
   /// baru dikirim setelah user berhenti mengetik sebentar.
   void search(String query) {
     if (query == _query) return;

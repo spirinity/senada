@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/data/muzo_api.dart';
+import '../core/data/jamendo_api.dart';
 import '../core/models/album.dart';
 import '../core/models/artist.dart';
 import '../features/explore/collection_screen.dart';

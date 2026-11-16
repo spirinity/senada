@@ -25,7 +25,7 @@ class CollectionScreen extends StatefulWidget {
   final String subtitle;
   final String artwork;
 
-  /// Mengambil daftar lagu dari Muzo.
+  /// Mengambil daftar lagu dari Jamendo.
   final Future<List<Song>> Function() loadSongs;
 
   /// Foto artis dibuat bulat.
