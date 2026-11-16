@@ -1,25 +1,46 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../core/data/lyrics_api.dart';
+import '../../core/data/stream_api.dart';
 import '../../core/models/song.dart';
 import '../history/history_controller.dart';
 
 /// Satu-satunya sumber state pemutaran, dipakai bersama oleh MiniPlayer dan NowPlayingScreen.
-// shortcut: progres disimulasikan dengan Timer tanpa audio, ganti dengan AudioService (just_audio) saat streaming dibuat.
+// shortcut: tanpa audio_service, jadi pemutaran berhenti saat app ditutup dan belum ada kontrol notifikasi.
 class PlayerController extends ChangeNotifier {
-  PlayerController({required HistoryController history}) : _history = history;
+  PlayerController({required HistoryController history}) : _history = history {
+    _subs = [
+      _audio.positionStream.listen((p) {
+        // Selama lagu baru dimuat, posisi lama masih terkirim; abaikan.
+        if (_loading) return;
+        _position = p;
+        notifyListeners();
+      }),
+      _audio.playingStream.listen((playing) {
+        _isPlaying = playing;
+        notifyListeners();
+      }),
+      _audio.processingStateStream.listen((state) {
+        if (state == ProcessingState.completed) next();
+      }),
+    ];
+  }
 
   final HistoryController _history;
-  static const _tick = Duration(milliseconds: 250);
+  final _audio = AudioPlayer();
+  late final List<StreamSubscription<Object>> _subs;
 
   List<Song> _queue = const [];
   int _index = -1;
   bool _isPlaying = false;
   Duration _position = Duration.zero;
-  Timer? _timer;
   List<LyricLine>? _lyrics;
+  // Penanda permintaan terbaru, supaya lagu yang terlambat dimuat tidak menimpa lagu baru.
+  int _loadId = 0;
+  bool _loading = false;
 
   Song? get current => _index < 0 ? null : _queue[_index];
   bool get isPlaying => _isPlaying;
@@ -50,7 +71,8 @@ class PlayerController extends ChangeNotifier {
   }
 
   void togglePlay() {
-    if (current != null) _setPlaying(!_isPlaying);
+    if (current == null) return;
+    _isPlaying ? _audio.pause() : _audio.play();
   }
 
   void seek(Duration position) {
@@ -59,6 +81,7 @@ class PlayerController extends ChangeNotifier {
     _position = Duration(
       milliseconds: position.inMilliseconds.clamp(0, song.duration.inMilliseconds),
     );
+    _audio.seek(_position);
     notifyListeners();
   }
 
@@ -76,12 +99,29 @@ class PlayerController extends ChangeNotifier {
     _start();
   }
 
-  void _start() {
+  Future<void> _start() async {
+    final song = current!;
+    final id = ++_loadId;
+    _loading = true;
     _position = Duration.zero;
     _lyrics = null;
-    _history.add(current!);
-    _setPlaying(true);
-    _loadLyrics(current!);
+    _isPlaying = true;
+    _history.add(song);
+    notifyListeners();
+    _loadLyrics(song);
+    try {
+      await _audio.setAudioSource(await fetchAudioSource(song.id));
+      if (id != _loadId) return;
+      _loading = false;
+      _audio.play();
+    } catch (e) {
+      // Permintaan lama yang dibatalkan lagu baru bukan error.
+      if (id != _loadId) return;
+      _loading = false;
+      _isPlaying = false;
+      notifyListeners();
+      debugPrint('Gagal memutar ${song.title}: $e');
+    }
   }
 
   /// Ambil lirik di latar belakang supaya lagu tetap langsung diputar.
@@ -93,25 +133,12 @@ class PlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setPlaying(bool playing) {
-    _isPlaying = playing;
-    _timer?.cancel();
-    if (playing) _timer = Timer.periodic(_tick, (_) => _onTick());
-    notifyListeners();
-  }
-
-  void _onTick() {
-    _position += _tick;
-    if (_position >= current!.duration) {
-      next();
-    } else {
-      notifyListeners();
-    }
-  }
-
   @override
   void dispose() {
-    _timer?.cancel();
+    for (final sub in _subs) {
+      sub.cancel();
+    }
+    _audio.dispose();
     super.dispose();
   }
 }
