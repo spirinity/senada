@@ -2,7 +2,7 @@
     <!-- Dibutuhkan untuk mengambil lirik dari LRCLIB di build release. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="senada"
+        android:label="Senada"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
