@@ -21,6 +21,18 @@ Future<List<Song>> searchSongs(String query) async {
   return tracks.map(_song).toList();
 }
 
+/// Lagu terpopuler Jamendo untuk dashboard, satu lagu per artis.
+Future<List<Song>> fetchPopularSongs() async {
+  final tracks = await _get('/tracks/', {
+    'order': 'popularity_total',
+    'groupby': 'artist_id',
+    'type': 'single albumtrack',
+    'imagesize': '500',
+    'limit': '20',
+  });
+  return tracks.map(_song).toList();
+}
+
 /// Cari album. [Album.id] dipakai untuk mengambil daftar lagunya.
 Future<List<Album>> searchAlbums(String query) async {
   List<dynamic> items;

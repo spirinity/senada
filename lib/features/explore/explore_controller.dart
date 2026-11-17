@@ -3,16 +3,40 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../core/data/jamendo_api.dart';
-import '../../core/data/sample_songs.dart';
 import '../../core/models/album.dart';
 import '../../core/models/artist.dart';
 import '../../core/models/song.dart';
 
 class ExploreController extends ChangeNotifier {
-  ExploreController({this.songs = sampleSongs});
+  ExploreController() {
+    loadPopular();
+  }
 
-  /// Lagu contoh untuk dashboard.
-  final List<Song> songs;
+  List<Song> _songs = const [];
+  bool _isLoadingPopular = true;
+  bool _popularFailed = false;
+  bool _disposed = false;
+
+  /// Lagu populer Jamendo untuk dashboard; kosong selama dimuat atau bila gagal.
+  List<Song> get songs => _songs;
+  bool get isLoadingPopular => _isLoadingPopular;
+  bool get popularFailed => _popularFailed;
+
+  Future<void> loadPopular() async {
+    _isLoadingPopular = true;
+    _popularFailed = false;
+    notifyListeners();
+    try {
+      _songs = await fetchPopularSongs();
+      _popularFailed = _songs.isEmpty;
+    } catch (_) {
+      _popularFailed = true;
+    }
+    // User bisa pindah tab sebelum request selesai.
+    if (_disposed) return;
+    _isLoadingPopular = false;
+    notifyListeners();
+  }
 
   String _query = '';
   List<Song> _songResults = const [];
@@ -74,6 +98,7 @@ class ExploreController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _debounce?.cancel();
     super.dispose();
   }

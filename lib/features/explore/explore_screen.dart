@@ -64,7 +64,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
               _SearchResults(explore: _explore, tab: _tab),
             ] else
-              _Dashboard(songs: _explore.songs),
+              _Dashboard(explore: _explore),
           ],
         ),
       ),
@@ -73,13 +73,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
 }
 
 class _Dashboard extends StatelessWidget {
-  const _Dashboard({required this.songs});
+  const _Dashboard({required this.explore});
 
-  final List<Song> songs;
+  final ExploreController explore;
 
   @override
   Widget build(BuildContext context) {
     final scope = AppScope.of(context);
+    final songs = explore.songs;
     final recent = scope.history.entries.take(8).map((e) => e.song).toList();
     final current = scope.player.current;
 
@@ -97,19 +98,67 @@ class _Dashboard extends StatelessWidget {
               child: _AlbumRow(songs: recent, size: 128),
             ),
           ],
-          const _SectionTitle('Album Pilihan'),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: _AlbumRow(songs: songs, size: 156),
-          ),
-          const _SectionTitle('Lagu Populer'),
-          for (final song in songs.take(8))
-            SongTile(
-              song: song,
-              isActive: current?.id == song.id,
-              onTap: () => scope.player.play(song, queue: songs),
-              trailing: FavoriteButton(song: song),
+          if (songs.isNotEmpty) ...[
+            const _SectionTitle('Album Pilihan'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: _AlbumRow(songs: songs, size: 156),
             ),
+            const _SectionTitle('Lagu Populer'),
+            for (final song in songs.take(8))
+              SongTile(
+                song: song,
+                isActive: current?.id == song.id,
+                onTap: () => scope.player.play(song, queue: songs),
+                trailing: FavoriteButton(song: song),
+              ),
+          ] else if (explore.isLoadingPopular)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 64),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else
+            _PopularError(onRetry: explore.loadPopular),
+        ],
+      ),
+    );
+  }
+}
+
+/// Pesan di dashboard bila lagu populer gagal dimuat.
+class _PopularError extends StatelessWidget {
+  const _PopularError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 48),
+      child: Column(
+        children: [
+          Icon(Icons.wifi_off_rounded, size: 32, color: colors.textTertiary),
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(
+              'Gagal memuat lagu populer',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              'Periksa koneksi internet lalu coba lagi.',
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: colors.textTertiary),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: const Text('Coba lagi')),
         ],
       ),
     );
