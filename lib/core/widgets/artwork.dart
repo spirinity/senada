@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 /// Gambar album persegi dengan sudut membulat.
-/// [path] bisa asset lokal (lagu contoh) atau URL (hasil pencarian Jamendo).
+/// [path] bisa asset lokal atau URL (sampul dari Jamendo).
 class Artwork extends StatelessWidget {
   const Artwork(this.path, {super.key, this.size, this.radius = 10});
 

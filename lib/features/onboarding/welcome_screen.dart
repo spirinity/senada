@@ -3,40 +3,34 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../app/app_routes.dart';
-import '../../core/data/sample_songs.dart';
 import '../../core/theme/theme.dart';
-import '../../core/widgets/artwork.dart';
 import '../../core/widgets/pressable.dart';
 
 class _OnboardingPage {
-  const _OnboardingPage(this.title, this.message, this.songIds);
+  const _OnboardingPage(this.title, this.message, this.icons);
 
   final String title;
   final String message;
 
-  /// Id tiga lagu di [sampleSongs] yang cover-nya ditumpuk sebagai visual utama.
-  final List<String> songIds;
-
-  List<String> get covers => [
-    for (final id in songIds) sampleSongs.firstWhere((s) => s.id == id).artwork,
-  ];
+  /// Tiga ikon yang ditumpuk sebagai visual utama.
+  final List<IconData> icons;
 }
 
 const _pages = [
   _OnboardingPage(
     'Dengarkan sepenuh hati',
     'Temukan lagu dari artis favoritmu, putar kapan saja, dan nikmati setiap nadanya.',
-    ['levitating', 'blank-space', 'blinding-lights'],
+    [Icons.library_music_rounded, Icons.headphones_rounded, Icons.album_rounded],
   ),
   _OnboardingPage(
     'Ikuti setiap lirik',
     'Lirik bergulir mengikuti lagu, jadi kamu bisa ikut bernyanyi tanpa tertinggal satu baris pun.',
-    ['kill-bill', 'pink-white', 'birds-of-a-feather'],
+    [Icons.mic_rounded, Icons.lyrics_rounded, Icons.music_note_rounded],
   ),
   _OnboardingPage(
     'Simpan yang kamu suka',
     'Tandai lagu favorit dan lihat lagi riwayat putarmu kapan pun kamu mau.',
-    ['good-4-u', 'leave-the-door-open', 'as-it-was'],
+    [Icons.favorite_rounded, Icons.history_rounded, Icons.queue_music_rounded],
   ),
 ];
 
@@ -147,7 +141,7 @@ class _PageContent extends StatelessWidget {
             children: [
               // Spacer di atas dan bawah memusatkan cover di ruang yang tersisa.
               const Spacer(),
-              Center(child: _CoverFan(covers: page.covers)),
+              Center(child: _CoverFan(icons: page.icons)),
               const Spacer(),
               Text(
                 page.title,
@@ -176,16 +170,18 @@ class _PageContent extends StatelessWidget {
   }
 }
 
-/// Tiga cover album yang mengipas keluar saat halaman muncul, melayang di atas bayangan lembut.
+/// Tiga kartu bergradasi yang mengipas keluar saat halaman muncul, melayang di atas bayangan lembut.
 class _CoverFan extends StatelessWidget {
-  const _CoverFan({required this.covers});
+  const _CoverFan({required this.icons});
 
-  final List<String> covers;
+  final List<IconData> icons;
 
   @override
   Widget build(BuildContext context) {
     // Ukuran mengikuti tinggi layar karena Column tidak memberi batas tinggi ke anaknya.
     final size = math.min(200.0, MediaQuery.sizeOf(context).height * 0.22);
+    // Warna dasar merek, hue-nya digeser sedikit per kartu supaya ketiganya berbeda.
+    final brand = HSLColor.fromColor(context.appColors.bgBrand);
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
@@ -229,7 +225,8 @@ class _CoverFan extends StatelessWidget {
                   child: Opacity(
                     opacity: i == 1 ? 1 : t,
                     child: _CoverCard(
-                      path: covers[i],
+                      icon: icons[i],
+                      color: brand.withHue((brand.hue + (i - 1) * 40 + 360) % 360),
                       size: i == 1 ? size : size * 0.86,
                     ),
                   ),
@@ -243,9 +240,14 @@ class _CoverFan extends StatelessWidget {
 }
 
 class _CoverCard extends StatelessWidget {
-  const _CoverCard({required this.path, required this.size});
+  const _CoverCard({
+    required this.icon,
+    required this.color,
+    required this.size,
+  });
 
-  final String path;
+  final IconData icon;
+  final HSLColor color;
   final double size;
 
   @override
@@ -262,7 +264,27 @@ class _CoverCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Artwork(path, size: size, radius: 18),
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              color.toColor(),
+              color.withLightness(color.lightness * 0.7).toColor(),
+            ],
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: size * 0.42,
+          color: Colors.white.withValues(alpha: 0.92),
+        ),
+      ),
     );
   }
 }

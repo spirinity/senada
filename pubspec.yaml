@@ -64,7 +64,6 @@ flutter:
   assets:
     - assets/icons/senada_icon.png
     - assets/tokens/tokens.css
-    - assets/albums/
 
   fonts:
     - family: Switzer
