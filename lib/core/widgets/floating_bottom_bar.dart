@@ -22,9 +22,10 @@ class FloatingBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // top: false,
-      // minimum: const EdgeInsets.only(bottom: 12),
+    return SafeArea(
+      top: false,
+      // Jarak minimum dari tepi bawah agar bar tampak melayang, juga di layar tanpa inset.
+      minimum: const EdgeInsets.only(bottom: 12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: GlassSurface(
