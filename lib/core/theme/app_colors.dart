@@ -6,40 +6,40 @@ import 'package:flutter/material.dart';
 /// accent-2, neutral, success, warning, error, and info.
 abstract final class AppColors {
   // ---------------------------------------------------------------------------
-  // Primary Ramp (Violet / Purple)
+  // Primary Ramp (Cobalt Blue)
   // ---------------------------------------------------------------------------
-  /// `primary-50`: `oklch(97.3% 0.015 298.6)` -> `#F7F4FF`
-  static const Color primary50 = Color(0xFFF7F4FF);
+  /// `primary-50`: `oklch(97.3% 0.015 298.6)` -> `#F2F5FF`
+  static const Color primary50 = Color(0xFFF2F5FF);
 
-  /// `primary-100`: `oklch(94.1% 0.033 299.1)` -> `#EEE7FF`
-  static const Color primary100 = Color(0xFFEEE7FF);
+  /// `primary-100`: `oklch(94.1% 0.033 299.1)` -> `#E3E9FD`
+  static const Color primary100 = Color(0xFFE3E9FD);
 
-  /// `primary-200`: `oklch(88.4% 0.066 298.7)` -> `#DED0FF`
-  static const Color primary200 = Color(0xFFDED0FF);
+  /// `primary-200`: `oklch(88.4% 0.066 298.7)` -> `#C8D3FA`
+  static const Color primary200 = Color(0xFFC8D3FA);
 
-  /// `primary-300`: `oklch(80.8% 0.113 299)` -> `#CAB0FF`
-  static const Color primary300 = Color(0xFFCAB0FF);
+  /// `primary-300`: `oklch(80.8% 0.113 299)` -> `#A3B4F3`
+  static const Color primary300 = Color(0xFFA3B4F3);
 
-  /// `primary-400`: `oklch(71.1% 0.176 298.9)` -> `#B285FF`
-  static const Color primary400 = Color(0xFFB285FF);
+  /// `primary-400`: `oklch(71.1% 0.176 298.9)` -> `#6C84E0`
+  static const Color primary400 = Color(0xFF6C84E0);
 
-  /// `primary-500`: `oklch(63.6% 0.228 298.9)` -> `#A15EFF`
-  static const Color primary500 = Color(0xFFA15EFF);
+  /// `primary-500`: `oklch(63.6% 0.228 298.9)` -> `#7088E8`
+  static const Color primary500 = Color(0xFF7088E8);
 
-  /// `primary-600`: `oklch(55.8% 0.286 298.8)` -> `#911CFF`
-  static const Color primary600 = Color(0xFF911CFF);
+  /// `primary-600`: `oklch(55.8% 0.286 298.8)` -> `#2843AA`
+  static const Color primary600 = Color(0xFF2843AA);
 
-  /// `primary-700`: `oklch(47.6% 0.255 299)` -> `#7601D3`
-  static const Color primary700 = Color(0xFF7601D3);
+  /// `primary-700`: `oklch(47.6% 0.255 299)` -> `#213889`
+  static const Color primary700 = Color(0xFF213889);
 
-  /// `primary-800`: `oklch(39.7% 0.213 298.8)` -> `#5B00A6`
-  static const Color primary800 = Color(0xFF5B00A6);
+  /// `primary-800`: `oklch(39.7% 0.213 298.8)` -> `#1C2E6B`
+  static const Color primary800 = Color(0xFF1C2E6B);
 
-  /// `primary-900`: `oklch(32.2% 0.173 299.1)` -> `#43007C`
-  static const Color primary900 = Color(0xFF43007C);
+  /// `primary-900`: `oklch(32.2% 0.173 299.1)` -> `#162456`
+  static const Color primary900 = Color(0xFF162456);
 
-  /// `primary-950`: `oklch(23.5% 0.126 299.4)` -> `#29004F`
-  static const Color primary950 = Color(0xFF29004F);
+  /// `primary-950`: `oklch(23.5% 0.126 299.4)` -> `#0F1838`
+  static const Color primary950 = Color(0xFF0F1838);
 
   // ---------------------------------------------------------------------------
   // Accent Ramp (Warm / Red-Orange)
@@ -497,12 +497,12 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       0xFFF6F5F9,
     ), // color-bg-surface-raised: oklch(97.2% 0.005 297.7)
     bgMuted: Color(0xFFDAD8DE), // color-bg-muted: oklch(88.6% 0.008 301.3)
-    bgBrand: Color(0xFF911CFF), // color-bg-brand: oklch(55.8% 0.286 298.8)
+    bgBrand: Color(0xFF2843AA), // color-bg-brand: oklch(55.8% 0.286 298.8)
     bgBrandHover: Color(
-      0xFF7601D3,
+      0xFF213889,
     ), // color-bg-brand-hover: oklch(47.6% 0.255 299)
     bgBrandActive: Color(
-      0xFF5B00A6,
+      0xFF1C2E6B,
     ), // color-bg-brand-active: oklch(39.7% 0.213 298.8)
     bgAccent: Color(0xFFDA0000), // color-bg-accent: oklch(55.8% 0.229 29.2)
     bgAccentHover: Color(
@@ -545,9 +545,9 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     textDisabled: Color(
       0xFFA3A1A8,
     ), // color-text-disabled: oklch(71.3% 0.01 299.2)
-    textLink: Color(0xFF911CFF), // color-text-link: oklch(55.8% 0.286 298.8)
+    textLink: Color(0xFF2843AA), // color-text-link: oklch(55.8% 0.286 298.8)
     textOnBrand: Color(
-      0xFFF7F4FF,
+      0xFFF2F5FF,
     ), // color-text-on-brand: oklch(97.3% 0.015 298.6)
     textOnAccent: Color(
       0xFFFFF3F0,
@@ -585,7 +585,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       0xFFA3A1A8,
     ), // color-border-strong: oklch(71.3% 0.01 299.2)
     borderActive: Color(
-      0xFF911CFF,
+      0xFF2843AA,
     ), // color-border-active: oklch(55.8% 0.286 298.8)
     borderError: Color(
       0xFFE2516F,
@@ -594,7 +594,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     textInverse: Color(
       0xFFF6F5F9,
     ), // color-text-inverse: oklch(97.2% 0.005 297.7)
-    ringFocus: Color(0xFFA15EFF), // color-ring-focus: oklch(63.6% 0.228 298.9)
+    ringFocus: Color(0xFF7088E8), // color-ring-focus: oklch(63.6% 0.228 298.9)
   );
 
   /// Dark mode semantic tokens (.dark in tokens.css)
@@ -605,12 +605,12 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       0xFF47464B,
     ), // color-bg-surface-raised: oklch(39.7% 0.008 295.2)
     bgMuted: Color(0xFF5D5B61), // color-bg-muted: oklch(47.5% 0.01 301.2)
-    bgBrand: Color(0xFFA15EFF), // color-bg-brand: oklch(63.6% 0.228 298.9)
+    bgBrand: Color(0xFF7088E8), // color-bg-brand: oklch(63.6% 0.228 298.9)
     bgBrandHover: Color(
-      0xFFB285FF,
+      0xFF6C84E0,
     ), // color-bg-brand-hover: oklch(71.1% 0.176 298.9)
     bgBrandActive: Color(
-      0xFFCAB0FF,
+      0xFFA3B4F3,
     ), // color-bg-brand-active: oklch(80.8% 0.113 299)
     bgAccent: Color(0xFFFF6D5C), // color-bg-accent: oklch(71.2% 0.181 29.1)
     bgAccentHover: Color(
@@ -653,9 +653,9 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     textDisabled: Color(
       0xFF747379,
     ), // color-text-disabled: oklch(55.8% 0.009 293.8)
-    textLink: Color(0xFFB285FF), // color-text-link: oklch(71.1% 0.176 298.9)
+    textLink: Color(0xFF6C84E0), // color-text-link: oklch(71.1% 0.176 298.9)
     textOnBrand: Color(
-      0xFF29004F,
+      0xFF0F1838,
     ), // color-text-on-brand: oklch(23.5% 0.126 299.4)
     textOnAccent: Color(
       0xFF410000,
@@ -691,7 +691,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
       0xFF747379,
     ), // color-border-strong: oklch(55.8% 0.009 293.8)
     borderActive: Color(
-      0xFFA15EFF,
+      0xFF7088E8,
     ), // color-border-active: oklch(63.6% 0.228 298.9)
     borderError: Color(
       0xFFE2516F,
@@ -700,7 +700,7 @@ class AppSemanticColors extends ThemeExtension<AppSemanticColors> {
     textInverse: Color(
       0xFF343237,
     ), // color-text-inverse: oklch(32.1% 0.009 303.9)
-    ringFocus: Color(0xFFB285FF), // color-ring-focus: oklch(71.1% 0.176 298.9)
+    ringFocus: Color(0xFF6C84E0), // color-ring-focus: oklch(71.1% 0.176 298.9)
   );
 
   @override

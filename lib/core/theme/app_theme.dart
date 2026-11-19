@@ -6,12 +6,12 @@ import 'app_colors.dart';
 /// and Material 3 ColorSchemes for both Light and Dark themes.
 abstract final class AppTheme {
   /// Primary font used for body, labels, and general UI.
-  static const String bodyFontFamily = 'Switzer';
+  static const String bodyFontFamily = 'Allo';
 
   /// Expressive display & editorial font used for headings and titles.
-  static const String titleFontFamily = 'Sentient';
+  static const String titleFontFamily = 'Allo';
 
-  /// Text theme using Sentient for display/headline/title styles and Switzer elsewhere.
+  /// Text theme using Allo for every style.
   static TextTheme _buildTextTheme(Color defaultTextColor) {
     return TextTheme(
       displayLarge: const TextStyle(
@@ -74,10 +74,10 @@ abstract final class AppTheme {
 
     final colorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: semantic.bgBrand, // primary-600 (#911CFF)
-      onPrimary: semantic.textOnBrand, // primary-50 (#F7F4FF)
-      primaryContainer: AppColors.primary100, // #EEE7FF
-      onPrimaryContainer: AppColors.primary900, // #43007C
+      primary: semantic.bgBrand, // primary-600 (#2843AA)
+      onPrimary: semantic.textOnBrand, // primary-50 (#F2F5FF)
+      primaryContainer: AppColors.primary100, // #E3E9FD
+      onPrimaryContainer: AppColors.primary900, // #162456
       secondary: semantic.bgAccent, // accent-600 (#DA0000)
       onSecondary: semantic.textOnAccent, // accent-50 (#FFF3F0)
       secondaryContainer: AppColors.accent100, // #FFE4E0
@@ -97,7 +97,7 @@ abstract final class AppTheme {
       outlineVariant: semantic.borderSubtle, // neutral-200 (#DAD8DE)
       inverseSurface: semantic.bgInverse, // neutral-900 (#343237)
       onInverseSurface: semantic.textInverse, // neutral-50 (#F6F5F9)
-      inversePrimary: AppColors.primary300, // #CAB0FF
+      inversePrimary: AppColors.primary300, // #A3B4F3
       shadow: Colors.black,
     );
 
@@ -133,10 +133,10 @@ abstract final class AppTheme {
 
     final colorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: semantic.bgBrand, // primary-500 (#A15EFF)
-      onPrimary: semantic.textOnBrand, // primary-950 (#29004F)
-      primaryContainer: AppColors.primary800, // #5B00A6
-      onPrimaryContainer: AppColors.primary100, // #EEE7FF
+      primary: semantic.bgBrand, // primary-500 (#7088E8)
+      onPrimary: semantic.textOnBrand, // primary-950 (#0F1838)
+      primaryContainer: AppColors.primary800, // #1C2E6B
+      onPrimaryContainer: AppColors.primary100, // #E3E9FD
       secondary: semantic.bgAccent, // accent-400 (#FF6D5C)
       onSecondary: semantic.textOnAccent, // accent-950 (#410000)
       secondaryContainer: AppColors.accent800, // #8A0000
@@ -156,7 +156,7 @@ abstract final class AppTheme {
       outlineVariant: semantic.borderSubtle, // neutral-800 (#47464B)
       inverseSurface: semantic.bgInverse, // neutral-100 (#ECEAEF)
       onInverseSurface: semantic.textInverse, // neutral-900 (#343237)
-      inversePrimary: AppColors.primary700, // #7601D3
+      inversePrimary: AppColors.primary700, // #213889
       shadow: Colors.black,
     );
 

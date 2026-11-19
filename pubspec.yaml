@@ -66,25 +66,16 @@ flutter:
     - assets/tokens/tokens.css
 
   fonts:
-    - family: Switzer
+    - family: Allo
       fonts:
-        - asset: assets/fonts/Switzer-Regular.otf
-        - asset: assets/fonts/Switzer-Italic.otf
+        - asset: assets/fonts/Allo-Regular.otf
+        - asset: assets/fonts/Allo-Oblique.otf
           style: italic
-        - asset: assets/fonts/Switzer-Medium.otf
+        - asset: assets/fonts/Allo-Medium.otf
           weight: 500
-        - asset: assets/fonts/Switzer-Semibold.otf
+        - asset: assets/fonts/Allo-SemiBold.otf
           weight: 600
-        - asset: assets/fonts/Switzer-Bold.otf
-          weight: 700
-    - family: Sentient
-      fonts:
-        - asset: assets/fonts/Sentient-Regular.otf
-        - asset: assets/fonts/Sentient-Italic.otf
-          style: italic
-        - asset: assets/fonts/Sentient-Medium.otf
-          weight: 500
-        - asset: assets/fonts/Sentient-Bold.otf
+        - asset: assets/fonts/Allo-Bold.otf
           weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
