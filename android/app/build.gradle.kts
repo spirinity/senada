@@ -17,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.senada.app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36 // Play Store mewajibkan target API 36; Flutter 3.32 masih default 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -34,7 +34,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24 // dibutuhkan audio_session (just_audio)
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
