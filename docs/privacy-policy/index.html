@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kebijakan Privasi Senada</title>
+  <meta name="description" content="Kebijakan privasi aplikasi pemutar musik Senada. Tanpa akun, tanpa iklan, tanpa pelacak.">
+  <link rel="icon" href="icon.png">
+  <style>
+    @font-face { font-family: "Allo"; src: url("Allo-Bold.otf") format("opentype"); font-weight: 700; font-display: swap; }
+    :root {
+      --bg: #f3f2f8; --card: #ffffff; --text: #1d1b26; --muted: #5d5a6b;
+      --brand: #2441a8; --brand-soft: #e8ecff; --line: #e3e1ec; --shadow: 0 1px 2px rgba(20,20,50,.06), 0 8px 24px rgba(20,20,50,.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #0d0e19; --card: #161728; --text: #ecebf5; --muted: #a3a1b6; --brand: #93a9ff; --brand-soft: #20254a; --line: #2a2b42; --shadow: none; }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    h1, h2 { font-family: "Allo", system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+
+    .hero { position: relative; overflow: hidden; color: #fff; text-align: center; padding: 56px 16px 84px;
+      background: radial-gradient(900px 400px at 15% -10%, #4a62d6 0%, transparent 60%),
+                  radial-gradient(700px 400px at 95% 10%, #5b2a9c 0%, transparent 55%),
+                  linear-gradient(160deg, #2441a8, #0a0e2c); }
+    .hero img { width: 84px; height: 84px; border-radius: 22px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+    .hero h1 { margin: 18px 0 6px; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.15; }
+    .hero p { margin: 0; opacity: .85; }
+    .chip { display: inline-block; margin-top: 16px; padding: 4px 14px; border-radius: 999px; font-size: .85rem; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); }
+    .lang { margin-top: 22px; display: inline-flex; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+    .lang button { appearance: none; border: 0; cursor: pointer; font: inherit; font-size: .9rem; padding: 6px 18px; border-radius: 999px; background: transparent; color: #fff; }
+    .lang button[aria-pressed="true"] { background: #fff; color: #1c2f7a; font-weight: 600; }
+
+    main { max-width: 780px; margin: -48px auto 40px; padding: 0 16px; position: relative; }
+    .highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .hl { background: var(--card); border-radius: 18px; padding: 18px 14px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--line); }
+    .hl .ic { font-size: 1.7rem; line-height: 1; }
+    .hl b { display: block; margin-top: 8px; font-size: .95rem; line-height: 1.3; }
+    .hl span { display: block; margin-top: 2px; font-size: .82rem; color: var(--muted); line-height: 1.4; }
+    @media (max-width: 560px) { .highlights { grid-template-columns: 1fr; } .hl { display: flex; gap: 14px; text-align: left; align-items: center; } .hl b { margin-top: 0; } }
+
+    .toc { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .toc strong { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .toc ol { margin: 8px 0 0; padding-left: 1.2rem; columns: 2; column-gap: 24px; font-size: .95rem; }
+    .toc a { color: var(--brand); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    @media (max-width: 560px) { .toc ol { columns: 1; } }
+
+    section { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px 10px; margin-bottom: 14px; box-shadow: var(--shadow); scroll-margin-top: 16px; }
+    h2 { margin: 0 0 10px; font-size: 1.15rem; color: var(--brand); display: flex; align-items: center; gap: 10px; }
+    h2 .n { display: inline-grid; place-items: center; min-width: 30px; height: 30px; border-radius: 10px; background: var(--brand-soft); font-size: .9rem; }
+    p { margin: 0 0 14px; }
+    ul { margin: 0 0 14px; padding-left: 1.2rem; }
+    li { margin-bottom: 6px; }
+    a { color: var(--brand); }
+    .callout { background: var(--brand-soft); border-radius: 14px; padding: 14px 16px; margin: 0 0 14px; }
+
+    .tbl { overflow-x: auto; margin: 0 0 14px; border: 1px solid var(--line); border-radius: 14px; }
+    table { border-collapse: collapse; width: 100%; font-size: .93rem; min-width: 520px; }
+    th, td { text-align: left; padding: 10px 14px; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: var(--brand-soft); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    tr:last-child td { border-bottom: 0; }
+
+    .contact { text-align: center; padding: 28px 24px 24px; }
+    .btn { display: inline-block; margin-top: 4px; padding: 12px 22px; border-radius: 999px; background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; }
+    @media (prefers-color-scheme: dark) { .btn { color: #0d0e19; } }
+
+    footer { text-align: center; color: var(--muted); font-size: .88rem; padding: 0 16px 48px; }
+
+    /* Tanpa JavaScript kedua bahasa tampil; dengan JavaScript hanya satu. */
+    .js [data-doc]:not(.active) { display: none; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <img src="icon.png" alt="Ikon Senada" width="84" height="84">
+    <h1 id="title">Kebijakan Privasi Senada</h1>
+    <p id="subtitle">Musik tanpa syarat. Data Anda tetap milik Anda.</p>
+    <span class="chip" id="eff">Berlaku mulai 19 November 2026</span><br>
+    <div class="lang" role="group" aria-label="Bahasa">
+      <button type="button" data-set="id" aria-pressed="true">Indonesia</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ INDONESIA ============ -->
+    <div data-doc="id" class="active" lang="id">
+      <div class="highlights">
+        <div class="hl"><div class="ic">🙅</div><div><b>Tanpa akun</b><span>Langsung putar, tanpa daftar atau masuk</span></div></div>
+        <div class="hl"><div class="ic">🚫</div><div><b>Tanpa iklan dan pelacak</b><span>Tidak ada analitik di dalam app</span></div></div>
+        <div class="hl"><div class="ic">📱</div><div><b>Data di perangkat</b><span>Favorit dan Riwayat tidak dikirim ke kami</span></div></div>
+      </div>
+
+      <nav class="toc" aria-label="Daftar isi">
+        <strong>Daftar isi</strong>
+        <ol>
+          <li><a href="#id-ringkasan">Ringkasan</a></li>
+          <li><a href="#id-data">Data yang kami kumpulkan</a></li>
+          <li><a href="#id-pihak3">Layanan pihak ketiga</a></li>
+          <li><a href="#id-perangkat">Data di perangkat Anda</a></li>
+          <li><a href="#id-izin">Izin aplikasi</a></li>
+          <li><a href="#id-keamanan">Keamanan</a></li>
+          <li><a href="#id-anak">Anak-anak</a></li>
+          <li><a href="#id-perubahan">Perubahan kebijakan</a></li>
+          <li><a href="#id-kontak">Hubungi kami</a></li>
+        </ol>
+      </nav>
+
+      <section id="id-ringkasan">
+        <h2><span class="n">1</span> Ringkasan</h2>
+        <p>Senada adalah aplikasi pemutar musik. Kami tidak meminta akun, tidak mengumpulkan data pribadi Anda, dan tidak memasang iklan, alat analitik, atau pelacak. Daftar Favorit dan Riwayat putar hanya ada di perangkat Anda dan tidak dikirim ke server kami.</p>
+      </section>
+
+      <section id="id-data">
+        <h2><span class="n">2</span> Data yang kami kumpulkan</h2>
+        <p>Pengembang Senada tidak mengumpulkan, menyimpan, atau menerima data pribadi apa pun dari Anda. Senada tidak memiliki server sendiri, tidak ada fitur daftar atau masuk akun, dan tidak meminta izin kamera, mikrofon, lokasi, kontak, atau penyimpanan.</p>
+      </section>
+
+      <section id="id-pihak3">
+        <h2><span class="n">3</span> Layanan pihak ketiga</h2>
+        <p>Agar bisa memutar musik, aplikasi menghubungi layanan berikut langsung dari perangkat Anda. Saat itu layanan tersebut dapat menerima alamat IP dan informasi teknis perangkat yang lazim dalam setiap koneksi internet.</p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Layanan</th><th>Dipakai untuk</th><th>Data yang dikirim</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Jamendo</strong><br>api.jamendo.com<br>storage.jamendo.com</td><td>Daftar lagu, sampul album, dan aliran audio</td><td>Teks pencarian dan ID lagu yang diputar</td></tr>
+              <tr><td><strong>LRCLIB</strong><br>lrclib.net</td><td>Lirik lagu</td><td>Judul, artis, album, dan durasi lagu yang sedang diputar</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Layanan-layanan ini memiliki kebijakan privasi sendiri yang tidak kami kendalikan. Kami menganjurkan Anda membacanya di situs masing-masing.</p>
+        <p class="callout">Lagu yang tersedia melalui Jamendo dilisensikan oleh senimannya, umumnya di bawah Creative Commons. Layar pemutar menampilkan tautan ke halaman lagu di Jamendo. Membuka tautan itu akan membawa Anda keluar dari Senada ke situs web Jamendo.</p>
+      </section>
+
+      <section id="id-perangkat">
+        <h2><span class="n">4</span> Data di perangkat Anda</h2>
+        <p>Daftar Favorit dan Riwayat putar dikelola di dalam aplikasi pada perangkat Anda. Data ini tidak dikirim ke pengembang maupun ke pihak ketiga mana pun.</p>
+      </section>
+
+      <section id="id-izin">
+        <h2><span class="n">5</span> Izin aplikasi</h2>
+        <p>Senada hanya memakai izin <strong>Internet</strong>, untuk memuat daftar lagu, gambar, lirik, dan memutar audio.</p>
+      </section>
+
+      <section id="id-keamanan">
+        <h2><span class="n">6</span> Keamanan</h2>
+        <p>Seluruh permintaan jaringan aplikasi dikirim melalui koneksi terenkripsi (HTTPS).</p>
+      </section>
+
+      <section id="id-anak">
+        <h2><span class="n">7</span> Anak-anak</h2>
+        <p>Senada tidak ditujukan khusus untuk anak di bawah 13 tahun, dan karena kami tidak mengumpulkan data pribadi, tidak ada data anak yang kami simpan.</p>
+      </section>
+
+      <section id="id-perubahan">
+        <h2><span class="n">8</span> Perubahan kebijakan</h2>
+        <p>Jika kebijakan ini berubah, versi terbaru akan dipublikasikan di halaman ini dengan tanggal berlaku yang diperbarui.</p>
+      </section>
+
+      <section id="id-kontak" class="contact">
+        <h2 style="justify-content:center"><span class="n">9</span> Hubungi kami</h2>
+        <p>Punya pertanyaan tentang kebijakan ini? Kirim email kepada kami.</p>
+        <a class="btn" href="mailto:arkamahardika35@gmail.com">arkamahardika35@gmail.com</a>
+      </section>
+    </div>
+
+    <!-- ============ ENGLISH ============ -->
+    <div data-doc="en" lang="en">
+      <div class="highlights">
+        <div class="hl"><div class="ic">🙅</div><div><b>No account</b><span>Just press play, no sign-up or login</span></div></div>
+        <div class="hl"><div class="ic">🚫</div><div><b>No ads or trackers</b><span>No analytics inside the app</span></div></div>
+        <div class="hl"><div class="ic">📱</div><div><b>Data stays on device</b><span>Favorites and History are never sent to us</span></div></div>
+      </div>
+
+      <nav class="toc" aria-label="Table of contents">
+        <strong>Contents</strong>
+        <ol>
+          <li><a href="#en-summary">Summary</a></li>
+          <li><a href="#en-data">Data we collect</a></li>
+          <li><a href="#en-third">Third-party services</a></li>
+          <li><a href="#en-device">Data on your device</a></li>
+          <li><a href="#en-permissions">App permissions</a></li>
+          <li><a href="#en-security">Security</a></li>
+          <li><a href="#en-children">Children</a></li>
+          <li><a href="#en-changes">Changes to this policy</a></li>
+          <li><a href="#en-contact">Contact us</a></li>
+        </ol>
+      </nav>
+
+      <section id="en-summary">
+        <h2><span class="n">1</span> Summary</h2>
+        <p>Senada is a music player app. It does not require an account, does not collect your personal data, and contains no ads, analytics, or trackers. Your Favorites and Listening History stay on your device and are never sent to us.</p>
+      </section>
+
+      <section id="en-data">
+        <h2><span class="n">2</span> Data we collect</h2>
+        <p>The Senada developer does not collect, store, or receive any personal data from you. The app has no server of its own, no sign-up or login, and does not request camera, microphone, location, contacts, or storage permissions.</p>
+      </section>
+
+      <section id="en-third">
+        <h2><span class="n">3</span> Third-party services</h2>
+        <p>To play music, the app connects directly from your device to the services below. They may receive your IP address and the standard technical information that accompanies any internet connection.</p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Service</th><th>Used for</th><th>Data sent</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Jamendo</strong><br>api.jamendo.com<br>storage.jamendo.com</td><td>Song listings, cover art, and audio streams</td><td>Your search text and the IDs of songs you play</td></tr>
+              <tr><td><strong>LRCLIB</strong><br>lrclib.net</td><td>Song lyrics</td><td>Title, artist, album, and duration of the current song</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>These services have their own privacy policies, which we do not control. We encourage you to read them on their websites.</p>
+        <p class="callout">Music available through Jamendo is licensed by its artists, generally under Creative Commons. The player screen links to the song's page on Jamendo; opening it takes you outside Senada to the Jamendo website.</p>
+      </section>
+
+      <section id="en-device">
+        <h2><span class="n">4</span> Data on your device</h2>
+        <p>Favorites and Listening History are managed inside the app on your device. They are not sent to the developer or to any third party.</p>
+      </section>
+
+      <section id="en-permissions">
+        <h2><span class="n">5</span> App permissions</h2>
+        <p>Senada only uses the <strong>Internet</strong> permission, to load song listings, images, and lyrics, and to stream audio.</p>
+      </section>
+
+      <section id="en-security">
+        <h2><span class="n">6</span> Security</h2>
+        <p>All network requests made by the app use encrypted connections (HTTPS).</p>
+      </section>
+
+      <section id="en-children">
+        <h2><span class="n">7</span> Children</h2>
+        <p>Senada is not specifically directed at children under 13, and because we collect no personal data, we hold no children's data.</p>
+      </section>
+
+      <section id="en-changes">
+        <h2><span class="n">8</span> Changes to this policy</h2>
+        <p>If this policy changes, the updated version will be posted on this page with a new effective date.</p>
+      </section>
+
+      <section id="en-contact" class="contact">
+        <h2 style="justify-content:center"><span class="n">9</span> Contact us</h2>
+        <p>Questions about this policy? Send us an email.</p>
+        <a class="btn" href="mailto:arkamahardika35@gmail.com">arkamahardika35@gmail.com</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>Senada &copy; 2026</footer>
+
+  <script>
+    (function () {
+      var T = {
+        id: ["Kebijakan Privasi Senada", "Musik tanpa syarat. Data Anda tetap milik Anda.", "Berlaku mulai 19 November 2026"],
+        en: ["Senada Privacy Policy", "Music with no strings attached. Your data stays yours.", "Effective November 19, 2026"]
+      };
+      var root = document.documentElement;
+      root.classList.add("js");
+      function setLang(l) {
+        document.querySelectorAll("[data-doc]").forEach(function (el) { el.classList.toggle("active", el.dataset.doc === l); });
+        document.querySelectorAll("[data-set]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.set === l)); });
+        document.getElementById("title").textContent = T[l][0];
+        document.getElementById("subtitle").textContent = T[l][1];
+        document.getElementById("eff").textContent = T[l][2];
+        root.lang = l;
+        document.title = T[l][0];
+      }
+      document.querySelectorAll("[data-set]").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.set); }); });
+      setLang(/^id\b/i.test(navigator.language || "") ? "id" : "en");
+    })();
+  </script>
+</body>
+</html>
